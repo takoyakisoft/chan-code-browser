@@ -133,8 +133,6 @@ export function ThreadView({
             />
             {thread && (
               <ThreadFloatingButtons 
-                showChart={effectiveShowChart}
-                setShowChart={effectiveSetShowChart}
                 onScrollToTop={scrollToTop}
                 onScrollToBottom={scrollToBottom}
                 isDarkMode={isDarkMode}
