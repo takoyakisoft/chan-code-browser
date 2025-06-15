@@ -2,6 +2,8 @@
 import { Button } from "@/components/ui/button";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
+import { BarChart3 } from "lucide-react";
 
 interface ThreadChartProps {
   showChart: boolean;
@@ -33,38 +35,43 @@ export function ThreadChart({ showChart, setShowChart, momentumData, isDarkMode 
             onClick={() => setShowChart(false)}
             className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
           >
-            ×
+            <BarChart3 className="h-4 w-4" />
           </Button>
         </div>
       </div>
-      <div className="p-3 h-48">
-        <ChartContainer config={chartConfig} className="h-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={momentumData}>
-              <XAxis 
-                dataKey="time" 
-                fontSize={10}
-                tick={{ fill: isDarkMode ? '#6a6a6a' : '#666' }}
-              />
-              <YAxis 
-                fontSize={10}
-                tick={{ fill: isDarkMode ? '#6a6a6a' : '#666' }}
-              />
-              <ChartTooltip 
-                content={<ChartTooltipContent />}
-                cursor={{ stroke: isDarkMode ? '#3e3e42' : '#ddd' }}
-              />
-              <Line 
-                type="monotone" 
-                dataKey="momentum" 
-                stroke="#007acc" 
-                strokeWidth={2}
-                dot={{ fill: '#007acc', strokeWidth: 2, r: 3 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </ChartContainer>
-      </div>
+      <ResizablePanelGroup direction="vertical">
+        <ResizablePanel defaultSize={100} minSize={20}>
+          <div className="p-3 h-full min-h-[120px]">
+            <ChartContainer config={chartConfig} className="h-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={momentumData}>
+                  <XAxis 
+                    dataKey="time" 
+                    fontSize={10}
+                    tick={{ fill: isDarkMode ? '#6a6a6a' : '#666' }}
+                  />
+                  <YAxis 
+                    fontSize={10}
+                    tick={{ fill: isDarkMode ? '#6a6a6a' : '#666' }}
+                  />
+                  <ChartTooltip 
+                    content={<ChartTooltipContent />}
+                    cursor={{ stroke: isDarkMode ? '#3e3e42' : '#ddd' }}
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="momentum" 
+                    stroke="#007acc" 
+                    strokeWidth={2}
+                    dot={{ fill: '#007acc', strokeWidth: 2, r: 3 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+          </div>
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+      </ResizablePanelGroup>
     </div>
   );
 }

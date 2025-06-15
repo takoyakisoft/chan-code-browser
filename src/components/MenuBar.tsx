@@ -2,6 +2,9 @@
 import { MenuBarMenu } from "@/components/MenuBarMenu";
 import { PanelToggles } from "@/components/PanelToggles";
 import { WindowControls } from "@/components/WindowControls";
+import { BarChart3 } from "lucide-react";
+import { Toggle } from "@/components/ui/toggle";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 
 interface MenuBarProps {
   showSidebar: boolean;
@@ -18,6 +21,8 @@ interface MenuBarProps {
   setThreadPanelLayout: (layout: "horizontal" | "vertical") => void;
   isRedditMode: boolean;
   setIsRedditMode: (mode: boolean) => void;
+  showChart?: boolean;
+  setShowChart?: (show: boolean) => void;
 }
 
 export function MenuBar({
@@ -35,6 +40,8 @@ export function MenuBar({
   setThreadPanelLayout,
   isRedditMode,
   setIsRedditMode,
+  showChart,
+  setShowChart,
 }: MenuBarProps) {
   return (
     <div className={`h-8 flex items-center justify-between px-2 border-b ${
@@ -78,6 +85,26 @@ export function MenuBar({
           isRedditMode={isRedditMode}
           setIsRedditMode={setIsRedditMode}
         />
+
+        {setShowChart && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Toggle 
+                  pressed={showChart}
+                  onPressedChange={setShowChart}
+                  size="sm"
+                  className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
+                >
+                  <BarChart3 className="h-3 w-3" />
+                </Toggle>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>勢いチャート</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
 
         <WindowControls isDarkMode={isDarkMode} />
       </div>
