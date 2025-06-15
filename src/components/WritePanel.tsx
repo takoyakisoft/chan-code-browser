@@ -14,12 +14,18 @@ interface WritePanelProps {
 
 export function WritePanel({ thread, isDarkMode, onClose }: WritePanelProps) {
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [content, setContent] = useState("");
 
   const handleSubmit = () => {
     if (!thread || !content.trim()) return;
     
-    console.log("書き込み:", { name: name || "名無しさん", content, threadId: thread.id });
+    console.log("書き込み:", { 
+      name: name || "名無しさん", 
+      email: email || "", 
+      content, 
+      threadId: thread.id 
+    });
     setContent("");
   };
 
@@ -61,7 +67,18 @@ export function WritePanel({ thread, isDarkMode, onClose }: WritePanelProps) {
                 placeholder="名前（省略可）"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className={`px-3 py-1 text-sm border rounded w-48 focus:outline-none focus:border-[#007acc] ${
+                className={`px-3 py-1 text-sm border rounded flex-1 focus:outline-none focus:border-[#007acc] ${
+                  isDarkMode 
+                    ? 'bg-[#3c3c3c] border-[#3e3e42] text-[#cccccc] placeholder-[#6a6a6a]'
+                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                }`}
+              />
+              <input
+                type="email"
+                placeholder="メール（省略可）"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={`px-3 py-1 text-sm border rounded flex-1 focus:outline-none focus:border-[#007acc] ${
                   isDarkMode 
                     ? 'bg-[#3c3c3c] border-[#3e3e42] text-[#cccccc] placeholder-[#6a6a6a]'
                     : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
