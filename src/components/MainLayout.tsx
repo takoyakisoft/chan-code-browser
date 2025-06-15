@@ -1,4 +1,3 @@
-
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { BoardList } from "@/components/BoardList";
 import { ThreadList } from "@/components/ThreadList";
@@ -30,6 +29,8 @@ interface MainLayoutProps {
   onThreadTabClick: (threadId: string) => void;
   onThreadTabClose: (threadId: string) => void;
   onThreadTabReorder: (tabs: Thread[]) => void;
+  showChart?: boolean;
+  setShowChart?: (show: boolean) => void;
 }
 
 export function MainLayout({
@@ -55,6 +56,8 @@ export function MainLayout({
   onThreadTabClick,
   onThreadTabClose,
   onThreadTabReorder,
+  showChart,
+  setShowChart,
 }: MainLayoutProps) {
   const { getSidebarSize, getThreadListSize, getThreadViewSize, getWritePanelSize } = getPanelSizes(
     showThreadList,
@@ -130,6 +133,8 @@ export function MainLayout({
                           onThreadTabClick={onThreadTabClick}
                           onThreadTabClose={onThreadTabClose}
                           onThreadTabReorder={onThreadTabReorder}
+                          showChart={showChart}
+                          setShowChart={setShowChart}
                         />
                       </div>
                     </ResizablePanel>
@@ -186,6 +191,8 @@ export function MainLayout({
                           onThreadTabClick={onThreadTabClick}
                           onThreadTabClose={onThreadTabClose}
                           onThreadTabReorder={onThreadTabReorder}
+                          showChart={showChart}
+                          setShowChart={setShowChart}
                         />
                       </div>
                     </ResizablePanel>

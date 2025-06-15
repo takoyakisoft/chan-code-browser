@@ -15,6 +15,8 @@ interface ThreadViewProps {
   onThreadTabClick: (threadId: string) => void;
   onThreadTabClose: (threadId: string) => void;
   onThreadTabReorder: (tabs: Thread[]) => void;
+  showChart?: boolean;
+  setShowChart?: (show: boolean) => void;
 }
 
 // モックデータ
@@ -56,10 +58,11 @@ export function ThreadView({
   threadTabs,
   onThreadTabClick,
   onThreadTabClose,
-  onThreadTabReorder
+  onThreadTabReorder,
+  showChart = false,
+  setShowChart
 }: ThreadViewProps) {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [showChart, setShowChart] = useState(false);
   const [momentumData, setMomentumData] = useState<Array<{time: string, momentum: number}>>([]);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -125,7 +128,7 @@ export function ThreadView({
       />
       
       <ResizablePanelGroup direction="vertical" className="flex-1 min-h-0">
-        <ResizablePanel defaultSize={showChart ? 70 : 100} minSize={40}>
+        <ResizablePanel defaultSize={showChart ? 60 : 100} minSize={30}>
           <div className="h-full relative">
             <ThreadContent 
               thread={thread}
@@ -136,8 +139,8 @@ export function ThreadView({
 
             {thread && (
               <ThreadFloatingButtons 
-                showChart={showChart}
-                setShowChart={setShowChart}
+                showChart={false}
+                setShowChart={() => {}}
                 onScrollToTop={scrollToTop}
                 onScrollToBottom={scrollToBottom}
                 isDarkMode={isDarkMode}
@@ -146,13 +149,18 @@ export function ThreadView({
           </div>
         </ResizablePanel>
 
-        {showChart && (
-          <ThreadChart 
-            showChart={showChart}
-            setShowChart={setShowChart}
-            momentumData={momentumData}
-            isDarkMode={isDarkMode}
-          />
+        {showChart && setShowChart && (
+          <>
+            <ResizableHandle />
+            <ResizablePanel defaultSize={40} minSize={20} maxSize={70}>
+              <ThreadChart 
+                showChart={showChart}
+                setShowChart={setShowChart}
+                momentumData={momentumData}
+                isDarkMode={isDarkMode}
+              />
+            </ResizablePanel>
+          </>
         )}
       </ResizablePanelGroup>
     </div>
