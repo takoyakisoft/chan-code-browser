@@ -1,8 +1,10 @@
+
 import { useEffect, useState } from "react";
 import { MessageCircle, Clock, X, List } from "lucide-react";
 import { Board, Thread } from "@/pages/Index";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
+import { DraggableTabs, TabItem } from "@/components/DraggableTabs";
 
 interface ThreadListProps {
   board: Board | null;
@@ -10,6 +12,10 @@ interface ThreadListProps {
   onThreadSelect: (thread: Thread) => void;
   isDarkMode: boolean;
   onClose: () => void;
+  boardTabs: Board[];
+  onBoardTabClick: (boardId: string) => void;
+  onBoardTabClose: (boardId: string) => void;
+  onBoardTabReorder: (tabs: Board[]) => void;
 }
 
 // モックデータ
@@ -26,7 +32,17 @@ const generateMockThreads = (boardId: string): Thread[] => {
   return threads;
 };
 
-export function ThreadList({ board, selectedThread, onThreadSelect, isDarkMode, onClose }: ThreadListProps) {
+export function ThreadList({ 
+  board, 
+  selectedThread, 
+  onThreadSelect, 
+  isDarkMode, 
+  onClose,
+  boardTabs,
+  onBoardTabClick,
+  onBoardTabClose,
+  onBoardTabReorder
+}: ThreadListProps) {
   const [threads, setThreads] = useState<Thread[]>([]);
 
   useEffect(() => {
@@ -38,8 +54,30 @@ export function ThreadList({ board, selectedThread, onThreadSelect, isDarkMode, 
     }
   }, [board]);
 
+  // 板タブの変換
+  const boardTabItems: TabItem[] = boardTabs.map(tab => ({
+    id: tab.id,
+    title: tab.name,
+    isActive: board?.id === tab.id
+  }));
+
+  const handleBoardTabReorderWrapper = (tabItems: TabItem[]) => {
+    const reorderedBoards = tabItems.map(item => 
+      boardTabs.find(board => board.id === item.id)!
+    );
+    onBoardTabReorder(reorderedBoards);
+  };
+
   return (
     <div className="h-full flex flex-col">
+      <DraggableTabs
+        tabs={boardTabItems}
+        onTabClick={onBoardTabClick}
+        onTabClose={onBoardTabClose}
+        onTabReorder={handleBoardTabReorderWrapper}
+        isDarkMode={isDarkMode}
+      />
+      
       <div className={`p-3 border-b flex items-center justify-between ${isDarkMode ? 'border-[#3e3e42] bg-[#2d2d30]' : 'border-gray-300 bg-gray-100'}`}>
         <div>
           <h2 className={`font-medium truncate ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>

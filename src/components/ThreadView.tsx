@@ -4,11 +4,16 @@ import { MessageSquare, User, Calendar, X } from "lucide-react";
 import { Thread, Post } from "@/pages/Index";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
+import { DraggableTabs, TabItem } from "@/components/DraggableTabs";
 
 interface ThreadViewProps {
   thread: Thread | null;
   isDarkMode: boolean;
   onClose: () => void;
+  threadTabs: Thread[];
+  onThreadTabClick: (threadId: string) => void;
+  onThreadTabClose: (threadId: string) => void;
+  onThreadTabReorder: (tabs: Thread[]) => void;
 }
 
 // モックデータ
@@ -27,7 +32,15 @@ const generateMockPosts = (threadId: string): Post[] => {
   return posts;
 };
 
-export function ThreadView({ thread, isDarkMode, onClose }: ThreadViewProps) {
+export function ThreadView({ 
+  thread, 
+  isDarkMode, 
+  onClose,
+  threadTabs,
+  onThreadTabClick,
+  onThreadTabClose,
+  onThreadTabReorder
+}: ThreadViewProps) {
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
@@ -39,8 +52,31 @@ export function ThreadView({ thread, isDarkMode, onClose }: ThreadViewProps) {
     }
   }, [thread]);
 
+  // スレッドタブの変換
+  const threadTabItems: TabItem[] = threadTabs.map(tab => ({
+    id: tab.id,
+    title: tab.title,
+    isActive: thread?.id === tab.id
+  }));
+
+  const handleThreadTabReorderWrapper = (tabItems: TabItem[]) => {
+    const reorderedThreads = tabItems.map(item => 
+      threadTabs.find(thread => thread.id === item.id)!
+    );
+    onThreadTabReorder(reorderedThreads);
+  };
+
   return (
     <div className="h-full flex flex-col">
+      <DraggableTabs
+        tabs={threadTabItems}
+        onTabClick={onThreadTabClick}
+        onTabClose={onThreadTabClose}
+        onTabReorder={handleThreadTabReorderWrapper}
+        isDarkMode={isDarkMode}
+        maxTitleLength={30}
+      />
+      
       <div className={`p-4 border-b flex items-start justify-between ${isDarkMode ? 'border-[#3e3e42] bg-[#2d2d30]' : 'border-gray-300 bg-gray-100'}`}>
         <div className="flex-1 min-w-0">
           <h1 className={`font-medium mb-1 ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>

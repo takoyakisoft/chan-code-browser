@@ -33,6 +33,10 @@ const Index = () => {
   const [selectedBoard, setSelectedBoard] = useState<Board | null>(null);
   const [selectedThread, setSelectedThread] = useState<Thread | null>(null);
 
+  // タブの状態管理
+  const [boardTabs, setBoardTabs] = useState<Board[]>([]);
+  const [threadTabs, setThreadTabs] = useState<Thread[]>([]);
+
   // Panel visibility states
   const [showSidebar, setShowSidebar] = useState(true);
   const [showThreadList, setShowThreadList] = useState(true);
@@ -48,6 +52,11 @@ const Index = () => {
     if (!showThreadList) {
       setShowThreadList(true);
     }
+    
+    // タブに追加（重複チェック）
+    if (!boardTabs.find(tab => tab.id === board.id)) {
+      setBoardTabs(prev => [...prev, board]);
+    }
   };
 
   // スレッド選択時の処理（コメント一覧を自動表示）
@@ -56,6 +65,51 @@ const Index = () => {
     if (!showThreadView) {
       setShowThreadView(true);
     }
+    
+    // タブに追加（重複チェック）
+    if (!threadTabs.find(tab => tab.id === thread.id)) {
+      setThreadTabs(prev => [...prev, thread]);
+    }
+  };
+
+  // 板タブの処理
+  const handleBoardTabClick = (boardId: string) => {
+    const board = boardTabs.find(tab => tab.id === boardId);
+    if (board) {
+      setSelectedBoard(board);
+    }
+  };
+
+  const handleBoardTabClose = (boardId: string) => {
+    setBoardTabs(prev => prev.filter(tab => tab.id !== boardId));
+    if (selectedBoard?.id === boardId) {
+      const remainingTabs = boardTabs.filter(tab => tab.id !== boardId);
+      setSelectedBoard(remainingTabs.length > 0 ? remainingTabs[remainingTabs.length - 1] : null);
+    }
+  };
+
+  const handleBoardTabReorder = (newTabs: Board[]) => {
+    setBoardTabs(newTabs);
+  };
+
+  // スレッドタブの処理
+  const handleThreadTabClick = (threadId: string) => {
+    const thread = threadTabs.find(tab => tab.id === threadId);
+    if (thread) {
+      setSelectedThread(thread);
+    }
+  };
+
+  const handleThreadTabClose = (threadId: string) => {
+    setThreadTabs(prev => prev.filter(tab => tab.id !== threadId));
+    if (selectedThread?.id === threadId) {
+      const remainingTabs = threadTabs.filter(tab => tab.id !== threadId);
+      setSelectedThread(remainingTabs.length > 0 ? remainingTabs[remainingTabs.length - 1] : null);
+    }
+  };
+
+  const handleThreadTabReorder = (newTabs: Thread[]) => {
+    setThreadTabs(newTabs);
   };
 
   // --- パネルのサイズロジック
@@ -116,6 +170,10 @@ const Index = () => {
                               onThreadSelect={handleThreadSelect}
                               isDarkMode={isDarkMode}
                               onClose={() => setShowThreadList(false)}
+                              boardTabs={boardTabs}
+                              onBoardTabClick={handleBoardTabClick}
+                              onBoardTabClose={handleBoardTabClose}
+                              onBoardTabReorder={handleBoardTabReorder}
                             />
                           </div>
                         </ResizablePanel>
@@ -134,6 +192,10 @@ const Index = () => {
                                 thread={selectedThread} 
                                 isDarkMode={isDarkMode} 
                                 onClose={() => setShowThreadView(false)}
+                                threadTabs={threadTabs}
+                                onThreadTabClick={handleThreadTabClick}
+                                onThreadTabClose={handleThreadTabClose}
+                                onThreadTabReorder={handleThreadTabReorder}
                               />
                             </div>
                           </ResizablePanel>
@@ -166,6 +228,10 @@ const Index = () => {
                               onThreadSelect={handleThreadSelect}
                               isDarkMode={isDarkMode}
                               onClose={() => setShowThreadList(false)}
+                              boardTabs={boardTabs}
+                              onBoardTabClick={handleBoardTabClick}
+                              onBoardTabClose={handleBoardTabClose}
+                              onBoardTabReorder={handleBoardTabReorder}
                             />
                           </div>
                         </ResizablePanel>
@@ -183,6 +249,10 @@ const Index = () => {
                                 thread={selectedThread} 
                                 isDarkMode={isDarkMode} 
                                 onClose={() => setShowThreadView(false)}
+                                threadTabs={threadTabs}
+                                onThreadTabClick={handleThreadTabClick}
+                                onThreadTabClose={handleThreadTabClose}
+                                onThreadTabReorder={handleThreadTabReorder}
                               />
                             </div>
                           </ResizablePanel>
