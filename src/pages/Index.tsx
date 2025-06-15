@@ -49,7 +49,7 @@ const Index = () => {
   const getWritePanelSize = () => 25;
 
   return (
-    <div className={`min-h-screen flex flex-col w-full ${isDarkMode ? 'dark bg-[#1e1e1e] text-[#cccccc]' : 'bg-white text-black'}`}>
+    <div className={`h-screen flex flex-col w-full ${isDarkMode ? 'dark bg-[#1e1e1e] text-[#cccccc]' : 'bg-white text-black'}`}>
       <MenuBar
         showSidebar={showSidebar}
         setShowSidebar={setShowSidebar}
@@ -65,7 +65,7 @@ const Index = () => {
         setThreadPanelLayout={setThreadPanelLayout}
       />
 
-      <div className="flex-1 flex w-full">
+      <div className="flex-1 flex w-full min-h-0">
         {(showSidebar || showThreadList || showThreadView) ? (
           <ResizablePanelGroup direction="horizontal" className="h-full">
             {showSidebar && (
@@ -76,6 +76,7 @@ const Index = () => {
                       selectedBoard={selectedBoard}
                       onBoardSelect={setSelectedBoard}
                       isDarkMode={isDarkMode}
+                      onClose={() => setShowSidebar(false)}
                     />
                   </div>
                 </ResizablePanel>
@@ -98,6 +99,7 @@ const Index = () => {
                               selectedThread={selectedThread}
                               onThreadSelect={setSelectedThread}
                               isDarkMode={isDarkMode}
+                              onClose={() => setShowThreadList(false)}
                             />
                           </div>
                         </ResizablePanel>
@@ -109,17 +111,25 @@ const Index = () => {
 
                     {showThreadView && (
                       <ResizablePanel defaultSize={showThreadList ? 75 : 100}>
-                        <ResizablePanelGroup direction="vertical">
+                        <ResizablePanelGroup direction="vertical" className="h-full">
                           <ResizablePanel defaultSize={getThreadViewSize()} minSize={30}>
                             <div className={`h-full ${isDarkMode ? 'bg-[#1e1e1e]' : 'bg-white'}`}>
-                              <ThreadView thread={selectedThread} isDarkMode={isDarkMode} />
+                              <ThreadView 
+                                thread={selectedThread} 
+                                isDarkMode={isDarkMode} 
+                                onClose={() => setShowThreadView(false)}
+                              />
                             </div>
                           </ResizablePanel>
                           {showWritePanel && (
                             <>
                               <ResizableHandle withHandle className={isDarkMode ? "bg-[#3e3e42]" : "bg-gray-300"} />
                               <ResizablePanel defaultSize={getWritePanelSize()} minSize={15} maxSize={50}>
-                                <WritePanel thread={selectedThread} isDarkMode={isDarkMode} />
+                                <WritePanel 
+                                  thread={selectedThread} 
+                                  isDarkMode={isDarkMode} 
+                                  onClose={() => setShowWritePanel(false)}
+                                />
                               </ResizablePanel>
                             </>
                           )}
@@ -139,6 +149,7 @@ const Index = () => {
                               selectedThread={selectedThread}
                               onThreadSelect={setSelectedThread}
                               isDarkMode={isDarkMode}
+                              onClose={() => setShowThreadList(false)}
                             />
                           </div>
                         </ResizablePanel>
@@ -149,17 +160,25 @@ const Index = () => {
                     )}
                     {showThreadView && (
                       <ResizablePanel defaultSize={showThreadList ? 75 : 100}>
-                        <ResizablePanelGroup direction="vertical">
+                        <ResizablePanelGroup direction="vertical" className="h-full">
                           <ResizablePanel defaultSize={getThreadViewSize()} minSize={30}>
                             <div className={`h-full ${isDarkMode ? 'bg-[#1e1e1e]' : 'bg-white'}`}>
-                              <ThreadView thread={selectedThread} isDarkMode={isDarkMode} />
+                              <ThreadView 
+                                thread={selectedThread} 
+                                isDarkMode={isDarkMode} 
+                                onClose={() => setShowThreadView(false)}
+                              />
                             </div>
                           </ResizablePanel>
                           {showWritePanel && (
                             <>
                               <ResizableHandle withHandle className={isDarkMode ? "bg-[#3e3e42]" : "bg-gray-300"} />
                               <ResizablePanel defaultSize={getWritePanelSize()} minSize={15} maxSize={50}>
-                                <WritePanel thread={selectedThread} isDarkMode={isDarkMode} />
+                                <WritePanel 
+                                  thread={selectedThread} 
+                                  isDarkMode={isDarkMode} 
+                                  onClose={() => setShowWritePanel(false)}
+                                />
                               </ResizablePanel>
                             </>
                           )}

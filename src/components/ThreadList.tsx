@@ -1,14 +1,16 @@
 
 import { useEffect, useState } from "react";
-import { MessageCircle, Clock } from "lucide-react";
+import { MessageCircle, Clock, X } from "lucide-react";
 import { Board, Thread } from "@/pages/Index";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 
 interface ThreadListProps {
   board: Board | null;
   selectedThread: Thread | null;
   onThreadSelect: (thread: Thread) => void;
   isDarkMode: boolean;
+  onClose: () => void;
 }
 
 // モックデータ
@@ -25,7 +27,7 @@ const generateMockThreads = (boardId: string): Thread[] => {
   return threads;
 };
 
-export function ThreadList({ board, selectedThread, onThreadSelect, isDarkMode }: ThreadListProps) {
+export function ThreadList({ board, selectedThread, onThreadSelect, isDarkMode, onClose }: ThreadListProps) {
   const [threads, setThreads] = useState<Thread[]>([]);
 
   useEffect(() => {
@@ -50,9 +52,19 @@ export function ThreadList({ board, selectedThread, onThreadSelect, isDarkMode }
 
   return (
     <div className="h-full flex flex-col">
-      <div className={`p-3 border-b ${isDarkMode ? 'border-[#3e3e42] bg-[#2d2d30]' : 'border-gray-300 bg-gray-100'}`}>
-        <h2 className={`font-medium truncate ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>{board.name}</h2>
-        <p className={`text-xs ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>{threads.length} スレッド</p>
+      <div className={`p-3 border-b flex items-center justify-between ${isDarkMode ? 'border-[#3e3e42] bg-[#2d2d30]' : 'border-gray-300 bg-gray-100'}`}>
+        <div>
+          <h2 className={`font-medium truncate ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>{board.name}</h2>
+          <p className={`text-xs ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>{threads.length} スレッド</p>
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onClose}
+          className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
+        >
+          <X className="h-4 w-4" />
+        </Button>
       </div>
       
       <ScrollArea className="flex-1">

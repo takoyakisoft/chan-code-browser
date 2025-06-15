@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Send, Minimize2, Maximize2 } from "lucide-react";
+import { Send, Minimize2, Maximize2, X } from "lucide-react";
 import { Thread } from "@/pages/Index";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -9,9 +9,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 interface WritePanelProps {
   thread: Thread | null;
   isDarkMode: boolean;
+  onClose: () => void;
 }
 
-export function WritePanel({ thread, isDarkMode }: WritePanelProps) {
+export function WritePanel({ thread, isDarkMode, onClose }: WritePanelProps) {
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
   const [isMinimized, setIsMinimized] = useState(false);
@@ -29,14 +30,24 @@ export function WritePanel({ thread, isDarkMode }: WritePanelProps) {
         isDarkMode ? 'bg-[#252526] border-[#3e3e42]' : 'bg-gray-50 border-gray-300'
       }`}>
         <span className={`text-sm ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>書き込みパネル（最小化）</span>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setIsMinimized(false)}
-          className={isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}
-        >
-          <Maximize2 className="h-4 w-4" />
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsMinimized(false)}
+            className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
+          >
+            <Maximize2 className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+            className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
     );
   }
@@ -54,9 +65,17 @@ export function WritePanel({ thread, isDarkMode }: WritePanelProps) {
             variant="ghost"
             size="sm"
             onClick={() => setIsMinimized(true)}
-            className={isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}
+            className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
           >
             <Minimize2 className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+            className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
+          >
+            <X className="h-4 w-4" />
           </Button>
         </div>
       </div>

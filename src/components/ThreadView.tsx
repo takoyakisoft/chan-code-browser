@@ -1,12 +1,14 @@
 
 import { useEffect, useState } from "react";
-import { MessageSquare, User, Calendar } from "lucide-react";
+import { MessageSquare, User, Calendar, X } from "lucide-react";
 import { Thread, Post } from "@/pages/Index";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 
 interface ThreadViewProps {
   thread: Thread | null;
   isDarkMode: boolean;
+  onClose: () => void;
 }
 
 // モックデータ
@@ -25,7 +27,7 @@ const generateMockPosts = (threadId: string): Post[] => {
   return posts;
 };
 
-export function ThreadView({ thread, isDarkMode }: ThreadViewProps) {
+export function ThreadView({ thread, isDarkMode, onClose }: ThreadViewProps) {
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
@@ -50,18 +52,28 @@ export function ThreadView({ thread, isDarkMode }: ThreadViewProps) {
 
   return (
     <div className="h-full flex flex-col">
-      <div className={`p-4 border-b ${isDarkMode ? 'border-[#3e3e42] bg-[#2d2d30]' : 'border-gray-300 bg-gray-100'}`}>
-        <h1 className={`font-medium mb-1 ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>{thread.title}</h1>
-        <div className={`flex items-center gap-4 text-xs ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
-          <span className="flex items-center gap-1">
-            <MessageSquare className="h-3 w-3" />
-            {posts.length} レス
-          </span>
-          <span className="flex items-center gap-1">
-            <Calendar className="h-3 w-3" />
-            {new Date(thread.lastModified).toLocaleString('ja-JP')}
-          </span>
+      <div className={`p-4 border-b flex items-start justify-between ${isDarkMode ? 'border-[#3e3e42] bg-[#2d2d30]' : 'border-gray-300 bg-gray-100'}`}>
+        <div className="flex-1 min-w-0">
+          <h1 className={`font-medium mb-1 ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>{thread.title}</h1>
+          <div className={`flex items-center gap-4 text-xs ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
+            <span className="flex items-center gap-1">
+              <MessageSquare className="h-3 w-3" />
+              {posts.length} レス
+            </span>
+            <span className="flex items-center gap-1">
+              <Calendar className="h-3 w-3" />
+              {new Date(thread.lastModified).toLocaleString('ja-JP')}
+            </span>
+          </div>
         </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onClose}
+          className={`h-6 w-6 p-0 ml-2 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
+        >
+          <X className="h-4 w-4" />
+        </Button>
       </div>
       
       <ScrollArea className="flex-1">
