@@ -1,5 +1,5 @@
 
-import { Folder, MessageSquare } from "lucide-react";
+import { Folder, MessageSquare, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -10,8 +10,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarHeader,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Board } from "@/pages/Index";
+import { Button } from "@/components/ui/button";
 
 // モックデータ
 const boards: Board[] = [
@@ -30,20 +32,31 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ selectedBoard, onBoardSelect }: AppSidebarProps) {
+  const { state, toggleSidebar } = useSidebar();
+  const isCollapsed = state === "collapsed";
+
   return (
     <Sidebar className="w-60 bg-[#252526] border-r border-[#3e3e42]">
-      <SidebarHeader className="p-4 border-b border-[#3e3e42]">
+      <SidebarHeader className="p-4 border-b border-[#3e3e42] flex flex-row items-center justify-between">
         <div className="flex items-center gap-2">
           <MessageSquare className="h-5 w-5 text-[#007acc]" />
-          <span className="font-semibold text-[#cccccc]">2ch Browser</span>
+          {!isCollapsed && <span className="font-semibold text-[#cccccc]">2ch Browser</span>}
         </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={toggleSidebar}
+          className="text-[#cccccc] hover:bg-[#2a2d2e] p-1"
+        >
+          {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+        </Button>
       </SidebarHeader>
 
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="text-[#cccccc] text-xs font-medium px-2 py-1">
             <Folder className="h-4 w-4 mr-1" />
-            板一覧
+            {!isCollapsed && "板一覧"}
           </SidebarGroupLabel>
           
           <SidebarGroupContent>
@@ -57,8 +70,10 @@ export function AppSidebar({ selectedBoard, onBoardSelect }: AppSidebarProps) {
                         ? "bg-[#094771] text-white" 
                         : "text-[#cccccc]"
                     }`}
+                    tooltip={isCollapsed ? board.name : undefined}
                   >
-                    <span className="truncate">{board.name}</span>
+                    <span className={isCollapsed ? "sr-only" : "truncate"}>{board.name}</span>
+                    {isCollapsed && <span className="text-xs">{board.name.charAt(0)}</span>}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

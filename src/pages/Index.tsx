@@ -4,7 +4,8 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { ThreadList } from "@/components/ThreadList";
 import { ThreadView } from "@/components/ThreadView";
-import { Separator } from "@/components/ui/separator";
+import { WritePanel } from "@/components/WritePanel";
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 
 export interface Board {
   id: string;
@@ -38,21 +39,35 @@ const Index = () => {
           onBoardSelect={setSelectedBoard}
         />
         
-        <div className="flex-1 flex">
-          <div className="w-80 border-r border-[#3e3e42] bg-[#252526]">
-            <ThreadList 
-              board={selectedBoard}
-              selectedThread={selectedThread}
-              onThreadSelect={setSelectedThread}
-            />
-          </div>
+        <ResizablePanelGroup direction="horizontal" className="flex-1">
+          <ResizablePanel defaultSize={25} minSize={15} maxSize={40}>
+            <div className="h-full border-r border-[#3e3e42] bg-[#252526]">
+              <ThreadList 
+                board={selectedBoard}
+                selectedThread={selectedThread}
+                onThreadSelect={setSelectedThread}
+              />
+            </div>
+          </ResizablePanel>
           
-          <Separator orientation="vertical" className="bg-[#3e3e42]" />
+          <ResizableHandle withHandle className="bg-[#3e3e42]" />
           
-          <div className="flex-1 bg-[#1e1e1e]">
-            <ThreadView thread={selectedThread} />
-          </div>
-        </div>
+          <ResizablePanel defaultSize={75}>
+            <ResizablePanelGroup direction="vertical">
+              <ResizablePanel defaultSize={75} minSize={30}>
+                <div className="h-full bg-[#1e1e1e]">
+                  <ThreadView thread={selectedThread} />
+                </div>
+              </ResizablePanel>
+              
+              <ResizableHandle withHandle className="bg-[#3e3e42]" />
+              
+              <ResizablePanel defaultSize={25} minSize={15} maxSize={50}>
+                <WritePanel thread={selectedThread} />
+              </ResizablePanel>
+            </ResizablePanelGroup>
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </div>
     </SidebarProvider>
   );
