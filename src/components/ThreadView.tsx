@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef } from "react";
 import { Thread, Post } from "@/pages/Index";
 import { DraggableTabs, TabItem } from "@/components/DraggableTabs";
@@ -6,6 +5,7 @@ import { ThreadHeader } from "@/components/ThreadHeader";
 import { ThreadContent } from "@/components/ThreadContent";
 import { ThreadChart } from "@/components/ThreadChart";
 import { ThreadFloatingButtons } from "@/components/ThreadFloatingButtons";
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 
 interface ThreadViewProps {
   thread: Thread | null;
