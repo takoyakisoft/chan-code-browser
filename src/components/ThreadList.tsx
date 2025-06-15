@@ -7,6 +7,7 @@ interface ThreadListProps {
   board: Board | null;
   selectedThread: Thread | null;
   onThreadSelect: (thread: Thread) => void;
+  isDarkMode: boolean;
 }
 
 // モックデータ
@@ -23,7 +24,7 @@ const generateMockThreads = (boardId: string): Thread[] => {
   return threads;
 };
 
-export function ThreadList({ board, selectedThread, onThreadSelect }: ThreadListProps) {
+export function ThreadList({ board, selectedThread, onThreadSelect, isDarkMode }: ThreadListProps) {
   const [threads, setThreads] = useState<Thread[]>([]);
 
   useEffect(() => {
@@ -37,7 +38,7 @@ export function ThreadList({ board, selectedThread, onThreadSelect }: ThreadList
 
   if (!board) {
     return (
-      <div className="h-full flex items-center justify-center text-[#6a6a6a]">
+      <div className={`h-full flex items-center justify-center ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
         <div className="text-center">
           <MessageCircle className="h-12 w-12 mx-auto mb-2 opacity-50" />
           <p>板を選択してください</p>
@@ -48,9 +49,9 @@ export function ThreadList({ board, selectedThread, onThreadSelect }: ThreadList
 
   return (
     <div className="h-full flex flex-col">
-      <div className="p-3 border-b border-[#3e3e42] bg-[#2d2d30]">
-        <h2 className="font-medium text-[#cccccc] truncate">{board.name}</h2>
-        <p className="text-xs text-[#6a6a6a]">{threads.length} スレッド</p>
+      <div className={`p-3 border-b ${isDarkMode ? 'border-[#3e3e42] bg-[#2d2d30]' : 'border-gray-300 bg-gray-100'}`}>
+        <h2 className={`font-medium truncate ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>{board.name}</h2>
+        <p className={`text-xs ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>{threads.length} スレッド</p>
       </div>
       
       <div className="flex-1 overflow-y-auto">
@@ -58,21 +59,23 @@ export function ThreadList({ board, selectedThread, onThreadSelect }: ThreadList
           <div
             key={thread.id}
             onClick={() => onThreadSelect(thread)}
-            className={`p-3 border-b border-[#3e3e42] cursor-pointer hover:bg-[#2a2d2e] ${
-              selectedThread?.id === thread.id ? "bg-[#094771]" : ""
+            className={`p-3 border-b cursor-pointer ${
+              isDarkMode 
+                ? `border-[#3e3e42] hover:bg-[#2a2d2e] ${selectedThread?.id === thread.id ? "bg-[#094771]" : ""}`
+                : `border-gray-300 hover:bg-gray-100 ${selectedThread?.id === thread.id ? "bg-blue-100" : ""}`
             }`}
           >
             <div className="flex items-start justify-between gap-2">
-              <h3 className="text-sm text-[#cccccc] line-clamp-2 flex-1">
+              <h3 className={`text-sm line-clamp-2 flex-1 ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>
                 {thread.title}
               </h3>
-              <div className="flex items-center gap-1 text-xs text-[#6a6a6a] shrink-0">
+              <div className={`flex items-center gap-1 text-xs shrink-0 ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
                 <MessageCircle className="h-3 w-3" />
                 {thread.resCount}
               </div>
             </div>
             
-            <div className="flex items-center gap-1 mt-1 text-xs text-[#6a6a6a]">
+            <div className={`flex items-center gap-1 mt-1 text-xs ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
               <Clock className="h-3 w-3" />
               {new Date(thread.lastModified).toLocaleString('ja-JP')}
             </div>

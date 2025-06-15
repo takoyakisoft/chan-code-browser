@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button";
 
 interface WritePanelProps {
   thread: Thread | null;
+  isDarkMode: boolean;
 }
 
-export function WritePanel({ thread }: WritePanelProps) {
+export function WritePanel({ thread, isDarkMode }: WritePanelProps) {
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
   const [isMinimized, setIsMinimized] = useState(false);
@@ -23,13 +24,15 @@ export function WritePanel({ thread }: WritePanelProps) {
 
   if (isMinimized) {
     return (
-      <div className="h-full bg-[#252526] border-t border-[#3e3e42] flex items-center justify-between px-4">
-        <span className="text-sm text-[#6a6a6a]">書き込みパネル（最小化）</span>
+      <div className={`h-full border-t flex items-center justify-between px-4 ${
+        isDarkMode ? 'bg-[#252526] border-[#3e3e42]' : 'bg-gray-50 border-gray-300'
+      }`}>
+        <span className={`text-sm ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>書き込みパネル（最小化）</span>
         <Button
           variant="ghost"
           size="sm"
           onClick={() => setIsMinimized(false)}
-          className="text-[#cccccc] hover:bg-[#2a2d2e]"
+          className={isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}
         >
           <Maximize2 className="h-4 w-4" />
         </Button>
@@ -38,15 +41,19 @@ export function WritePanel({ thread }: WritePanelProps) {
   }
 
   return (
-    <div className="h-full bg-[#252526] border-t border-[#3e3e42] flex flex-col">
-      <div className="p-3 border-b border-[#3e3e42] bg-[#2d2d30] flex items-center justify-between">
-        <h3 className="font-medium text-[#cccccc]">書き込み</h3>
+    <div className={`h-full border-t flex flex-col ${
+      isDarkMode ? 'bg-[#252526] border-[#3e3e42]' : 'bg-gray-50 border-gray-300'
+    }`}>
+      <div className={`p-3 border-b flex items-center justify-between ${
+        isDarkMode ? 'border-[#3e3e42] bg-[#2d2d30]' : 'border-gray-300 bg-gray-100'
+      }`}>
+        <h3 className={`font-medium ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>書き込み</h3>
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setIsMinimized(true)}
-            className="text-[#cccccc] hover:bg-[#2a2d2e]"
+            className={isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}
           >
             <Minimize2 className="h-4 w-4" />
           </Button>
@@ -54,12 +61,12 @@ export function WritePanel({ thread }: WritePanelProps) {
       </div>
 
       {!thread ? (
-        <div className="flex-1 flex items-center justify-center text-[#6a6a6a]">
+        <div className={`flex-1 flex items-center justify-center ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
           <p>スレッドを選択してください</p>
         </div>
       ) : (
         <div className="flex-1 p-4 flex flex-col gap-3">
-          <div className="text-sm text-[#6a6a6a]">
+          <div className={`text-sm ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-600'}`}>
             {thread.title}
           </div>
           
@@ -69,7 +76,11 @@ export function WritePanel({ thread }: WritePanelProps) {
               placeholder="名前（省略可）"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="px-3 py-1 text-sm bg-[#3c3c3c] border border-[#3e3e42] rounded text-[#cccccc] placeholder-[#6a6a6a] focus:outline-none focus:border-[#007acc] w-48"
+              className={`px-3 py-1 text-sm border rounded w-48 focus:outline-none focus:border-[#007acc] ${
+                isDarkMode 
+                  ? 'bg-[#3c3c3c] border-[#3e3e42] text-[#cccccc] placeholder-[#6a6a6a]'
+                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+              }`}
             />
           </div>
 
@@ -77,7 +88,11 @@ export function WritePanel({ thread }: WritePanelProps) {
             placeholder="書き込み内容を入力..."
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="flex-1 bg-[#3c3c3c] border-[#3e3e42] text-[#cccccc] placeholder-[#6a6a6a] focus:border-[#007acc] resize-none"
+            className={`flex-1 resize-none focus:border-[#007acc] ${
+              isDarkMode 
+                ? 'bg-[#3c3c3c] border-[#3e3e42] text-[#cccccc] placeholder-[#6a6a6a]'
+                : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+            }`}
           />
 
           <div className="flex justify-end">

@@ -29,24 +29,25 @@ const boards: Board[] = [
 interface AppSidebarProps {
   selectedBoard: Board | null;
   onBoardSelect: (board: Board) => void;
+  isDarkMode: boolean;
 }
 
-export function AppSidebar({ selectedBoard, onBoardSelect }: AppSidebarProps) {
+export function AppSidebar({ selectedBoard, onBoardSelect, isDarkMode }: AppSidebarProps) {
   const { state, toggleSidebar } = useSidebar();
   const isCollapsed = state === "collapsed";
 
   return (
-    <Sidebar className="w-60 bg-[#252526] border-r border-[#3e3e42]">
-      <SidebarHeader className="p-4 border-b border-[#3e3e42] flex flex-row items-center justify-between">
+    <Sidebar className={`w-60 border-r ${isDarkMode ? 'bg-[#252526] border-[#3e3e42]' : 'bg-gray-50 border-gray-300'}`}>
+      <SidebarHeader className={`p-4 border-b flex flex-row items-center justify-between ${isDarkMode ? 'border-[#3e3e42]' : 'border-gray-300'}`}>
         <div className="flex items-center gap-2">
           <MessageSquare className="h-5 w-5 text-[#007acc]" />
-          {!isCollapsed && <span className="font-semibold text-[#cccccc]">2ch Browser</span>}
+          {!isCollapsed && <span className={`font-semibold ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>2ch Browser</span>}
         </div>
         <Button
           variant="ghost"
           size="sm"
           onClick={toggleSidebar}
-          className="text-[#cccccc] hover:bg-[#2a2d2e] p-1"
+          className={`p-1 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
         >
           {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
         </Button>
@@ -54,7 +55,7 @@ export function AppSidebar({ selectedBoard, onBoardSelect }: AppSidebarProps) {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-[#cccccc] text-xs font-medium px-2 py-1">
+          <SidebarGroupLabel className={`text-xs font-medium px-2 py-1 ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-700'}`}>
             <Folder className="h-4 w-4 mr-1" />
             {!isCollapsed && "板一覧"}
           </SidebarGroupLabel>
@@ -65,10 +66,12 @@ export function AppSidebar({ selectedBoard, onBoardSelect }: AppSidebarProps) {
                 <SidebarMenuItem key={board.id}>
                   <SidebarMenuButton
                     onClick={() => onBoardSelect(board)}
-                    className={`w-full text-left px-2 py-1 text-sm hover:bg-[#2a2d2e] ${
+                    className={`w-full text-left px-2 py-1 text-sm ${
+                      isDarkMode ? 'hover:bg-[#2a2d2e]' : 'hover:bg-gray-200'
+                    } ${
                       selectedBoard?.id === board.id 
-                        ? "bg-[#094771] text-white" 
-                        : "text-[#cccccc]"
+                        ? (isDarkMode ? "bg-[#094771] text-white" : "bg-blue-100 text-blue-900")
+                        : (isDarkMode ? "text-[#cccccc]" : "text-gray-700")
                     }`}
                     tooltip={isCollapsed ? board.name : undefined}
                   >
