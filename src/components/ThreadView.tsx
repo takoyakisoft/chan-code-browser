@@ -39,31 +39,28 @@ export function ThreadView({ thread, isDarkMode, onClose }: ThreadViewProps) {
     }
   }, [thread]);
 
-  if (!thread) {
-    return (
-      <div className={`h-full flex items-center justify-center ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
-        <div className="text-center">
-          <MessageSquare className="h-12 w-12 mx-auto mb-2 opacity-50" />
-          <p>スレッドを選択してください</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="h-full flex flex-col">
       <div className={`p-4 border-b flex items-start justify-between ${isDarkMode ? 'border-[#3e3e42] bg-[#2d2d30]' : 'border-gray-300 bg-gray-100'}`}>
         <div className="flex-1 min-w-0">
-          <h1 className={`font-medium mb-1 ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>{thread.title}</h1>
+          <h1 className={`font-medium mb-1 ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>
+            {thread ? thread.title : 'スレッド未指定'}
+          </h1>
           <div className={`flex items-center gap-4 text-xs ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
-            <span className="flex items-center gap-1">
-              <MessageSquare className="h-3 w-3" />
-              {posts.length} レス
-            </span>
-            <span className="flex items-center gap-1">
-              <Calendar className="h-3 w-3" />
-              {new Date(thread.lastModified).toLocaleString('ja-JP')}
-            </span>
+            {thread ? (
+              <>
+                <span className="flex items-center gap-1">
+                  <MessageSquare className="h-3 w-3" />
+                  {posts.length} レス
+                </span>
+                <span className="flex items-center gap-1">
+                  <Calendar className="h-3 w-3" />
+                  {new Date(thread.lastModified).toLocaleString('ja-JP')}
+                </span>
+              </>
+            ) : (
+              <span>スレッドを選択してください</span>
+            )}
           </div>
         </div>
         <Button
@@ -77,26 +74,35 @@ export function ThreadView({ thread, isDarkMode, onClose }: ThreadViewProps) {
       </div>
       
       <ScrollArea className="flex-1">
-        <div className="p-4 space-y-4">
-          {posts.map((post) => (
-            <div key={post.id} className={`border-l-2 pl-4 ${isDarkMode ? 'border-[#3e3e42]' : 'border-gray-300'}`}>
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-sm font-medium text-[#007acc]">{post.id}</span>
-                <div className={`flex items-center gap-1 text-xs ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
-                  <User className="h-3 w-3" />
-                  <span>{post.name}</span>
-                </div>
-                <span className={`text-xs ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
-                  {new Date(post.date).toLocaleString('ja-JP')}
-                </span>
-              </div>
-              
-              <div className={`text-sm whitespace-pre-wrap leading-relaxed ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>
-                {post.content}
-              </div>
+        {!thread ? (
+          <div className={`h-full flex items-center justify-center ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
+            <div className="text-center">
+              <MessageSquare className="h-12 w-12 mx-auto mb-2 opacity-50" />
+              <p>スレッドを選択してください</p>
             </div>
-          ))}
-        </div>
+          </div>
+        ) : (
+          <div className="p-4 space-y-4">
+            {posts.map((post) => (
+              <div key={post.id} className={`border-l-2 pl-4 ${isDarkMode ? 'border-[#3e3e42]' : 'border-gray-300'}`}>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-sm font-medium text-[#007acc]">{post.id}</span>
+                  <div className={`flex items-center gap-1 text-xs ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
+                    <User className="h-3 w-3" />
+                    <span>{post.name}</span>
+                  </div>
+                  <span className={`text-xs ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
+                    {new Date(post.date).toLocaleString('ja-JP')}
+                  </span>
+                </div>
+                
+                <div className={`text-sm whitespace-pre-wrap leading-relaxed ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>
+                  {post.content}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </ScrollArea>
     </div>
   );

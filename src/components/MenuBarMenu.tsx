@@ -6,7 +6,7 @@ import {
   MenubarSeparator,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import { FileText, X } from "lucide-react";
+import { FileText, Eye } from "lucide-react";
 
 interface MenuBarMenuProps {
   showSidebar: boolean;
@@ -51,7 +51,7 @@ export function MenuBarMenu({
 
       <MenubarMenu>
         <MenubarTrigger className={`text-xs px-2 py-1 flex items-center gap-1 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#3e3e42]' : 'text-black hover:bg-gray-200'}`}>
-          <X className="h-3 w-3" />
+          <Eye className="h-3 w-3" />
           表示
         </MenubarTrigger>
         <MenubarContent className={isDarkMode ? 'bg-[#252526] border-[#3e3e42]' : 'bg-white border-gray-300'}>
