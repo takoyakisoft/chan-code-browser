@@ -124,31 +124,37 @@ export function ThreadView({
         onClose={onClose}
       />
       
-      <div className="flex-1 flex flex-col min-h-0 relative">
-        <ThreadContent 
-          thread={thread}
-          posts={posts}
-          isDarkMode={isDarkMode}
-          ref={scrollAreaRef}
-        />
-        
-        <ThreadChart 
-          showChart={showChart}
-          setShowChart={setShowChart}
-          momentumData={momentumData}
-          isDarkMode={isDarkMode}
-        />
+      <ResizablePanelGroup direction="vertical" className="flex-1 min-h-0">
+        <ResizablePanel defaultSize={showChart ? 70 : 100} minSize={40}>
+          <div className="h-full relative">
+            <ThreadContent 
+              thread={thread}
+              posts={posts}
+              isDarkMode={isDarkMode}
+              ref={scrollAreaRef}
+            />
 
-        {thread && (
-          <ThreadFloatingButtons 
+            {thread && (
+              <ThreadFloatingButtons 
+                showChart={showChart}
+                setShowChart={setShowChart}
+                onScrollToTop={scrollToTop}
+                onScrollToBottom={scrollToBottom}
+                isDarkMode={isDarkMode}
+              />
+            )}
+          </div>
+        </ResizablePanel>
+
+        {showChart && (
+          <ThreadChart 
             showChart={showChart}
             setShowChart={setShowChart}
-            onScrollToTop={scrollToTop}
-            onScrollToBottom={scrollToBottom}
+            momentumData={momentumData}
             isDarkMode={isDarkMode}
           />
         )}
-      </div>
+      </ResizablePanelGroup>
     </div>
   );
 }

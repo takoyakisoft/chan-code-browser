@@ -23,26 +23,27 @@ export function ThreadChart({ showChart, setShowChart, momentumData, isDarkMode 
   if (!showChart) return null;
 
   return (
-    <div className={`border-t ${isDarkMode ? 'border-[#3e3e42] bg-[#1e1e1e]' : 'border-gray-300 bg-white'}`}>
-      <div className={`p-3 border-b ${isDarkMode ? 'border-[#3e3e42]' : 'border-gray-300'}`}>
-        <div className="flex justify-between items-center">
-          <h3 className={`text-sm font-medium ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>
-            書き込み勢い
-          </h3>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setShowChart(false)}
-            className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
-          >
-            <BarChart3 className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
-      <ResizablePanelGroup direction="vertical">
-        <ResizablePanel defaultSize={100} minSize={20}>
-          <div className="p-3 h-full min-h-[120px]">
-            <ChartContainer config={chartConfig} className="h-full">
+    <ResizablePanelGroup direction="vertical" className={`border-t ${isDarkMode ? 'border-[#3e3e42] bg-[#1e1e1e]' : 'border-gray-300 bg-white'}`}>
+      <ResizableHandle />
+      <ResizablePanel defaultSize={30} minSize={15} maxSize={60}>
+        <div className="h-full flex flex-col">
+          <div className={`p-3 border-b ${isDarkMode ? 'border-[#3e3e42]' : 'border-gray-300'}`}>
+            <div className="flex justify-between items-center">
+              <h3 className={`text-sm font-medium ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>
+                書き込み勢い
+              </h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowChart(false)}
+                className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
+              >
+                <BarChart3 className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          <div className="flex-1 p-3">
+            <ChartContainer config={chartConfig} className="h-full min-h-[120px]">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={momentumData}>
                   <XAxis 
@@ -69,9 +70,8 @@ export function ThreadChart({ showChart, setShowChart, momentumData, isDarkMode 
               </ResponsiveContainer>
             </ChartContainer>
           </div>
-        </ResizablePanel>
-        <ResizableHandle withHandle />
-      </ResizablePanelGroup>
-    </div>
+        </div>
+      </ResizablePanel>
+    </ResizablePanelGroup>
   );
 }

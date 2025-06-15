@@ -84,27 +84,9 @@ export function MenuBar({
           setIsDarkMode={setIsDarkMode}
           isRedditMode={isRedditMode}
           setIsRedditMode={setIsRedditMode}
+          showChart={showChart}
+          setShowChart={setShowChart}
         />
-
-        {setShowChart && (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Toggle 
-                  pressed={showChart}
-                  onPressedChange={setShowChart}
-                  size="sm"
-                  className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
-                >
-                  <BarChart3 className="h-3 w-3" />
-                </Toggle>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>勢いチャート</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        )}
 
         <WindowControls isDarkMode={isDarkMode} />
       </div>

@@ -1,5 +1,5 @@
 
-import { Folder, List, MessageSquare, Edit, Moon, Sun, GitBranch } from "lucide-react";
+import { Folder, List, MessageSquare, Edit, Moon, Sun, GitBranch, BarChart3 } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 
@@ -16,6 +16,8 @@ interface PanelTogglesProps {
   setIsDarkMode: (dark: boolean) => void;
   isRedditMode: boolean;
   setIsRedditMode: (mode: boolean) => void;
+  showChart?: boolean;
+  setShowChart?: (show: boolean) => void;
 }
 
 export function PanelToggles({
@@ -31,6 +33,8 @@ export function PanelToggles({
   setIsDarkMode,
   isRedditMode,
   setIsRedditMode,
+  showChart,
+  setShowChart,
 }: PanelTogglesProps) {
   return (
     <TooltipProvider>
@@ -115,6 +119,24 @@ export function PanelToggles({
           <p>{isRedditMode ? "Reddit形式" : "時系列順"}</p>
         </TooltipContent>
       </Tooltip>
+
+      {setShowChart && (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Toggle 
+              pressed={showChart}
+              onPressedChange={setShowChart}
+              size="sm"
+              className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
+            >
+              <BarChart3 className="h-3 w-3" />
+            </Toggle>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>勢いチャート</p>
+          </TooltipContent>
+        </Tooltip>
+      )}
 
       <div className={`w-px h-4 ${isDarkMode ? 'bg-[#3e3e42]' : 'bg-gray-300'}`} />
 
