@@ -1,5 +1,5 @@
 
-import { Folder, List, MessageSquare, Edit, Moon, Sun } from "lucide-react";
+import { Folder, List, MessageSquare, Edit, Moon, Sun, GitBranch } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
 
 interface PanelTogglesProps {
@@ -82,7 +82,7 @@ export function PanelToggles({
         className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
         title={isRedditMode ? "Reddit形式" : "時系列順"}
       >
-        <MessageSquare className="h-3 w-3" />
+        <GitBranch className="h-3 w-3" />
       </Toggle>
 
       <div className={`w-px h-4 ${isDarkMode ? 'bg-[#3e3e42]' : 'bg-gray-300'}`} />
