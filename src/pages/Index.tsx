@@ -41,11 +41,6 @@ const Index = () => {
   // レイアウト: "horizontal"=横並び, "vertical"=上下
   const [threadPanelLayout, setThreadPanelLayout] = useState<"horizontal" | "vertical">("horizontal");
 
-  // サイドバーが完全非表示でも再表示できるよう、SidebarTriggerを固定表示する
-  // 右上に表示するためのスタイル
-  const sidebarTriggerClass =
-    "fixed top-2 left-2 z-50 bg-white dark:bg-[#252526] border border-gray-300 dark:border-[#3e3e42] rounded shadow-md";
-
   // --- パネルのサイズロジック
   const getThreadListSize = () => (showThreadView ? 25 : 100);
   const getThreadViewSize = () => (showWritePanel ? 75 : 100);
@@ -68,19 +63,24 @@ const Index = () => {
         setThreadPanelLayout={setThreadPanelLayout}
       />
 
-      {/* サイドバーが非表示時も再表示トリガーを左上に出す */}
-      {!showSidebar && (
-        <div className={sidebarTriggerClass} style={{ width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <SidebarTrigger
-            onClick={() => setShowSidebar(true)}
-            className="h-8 w-8 m-0 p-0"
-            aria-label="板一覧を表示"
-          />
-        </div>
-      )}
-
       <SidebarProvider defaultOpen={showSidebar}>
-        <div className="flex-1 flex w-full">
+        <div className="flex-1 flex w-full relative">
+          {/* サイドバーが非表示時も再表示トリガーを左上に出す */}
+          {!showSidebar && (
+            <div 
+              className={`fixed top-2 left-2 z-50 ${
+                isDarkMode ? 'bg-[#252526] border-[#3e3e42]' : 'bg-white border-gray-300'
+              } border rounded shadow-md`}
+              style={{ width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center" }}
+            >
+              <SidebarTrigger
+                onClick={() => setShowSidebar(true)}
+                className="h-8 w-8 m-0 p-0"
+                aria-label="板一覧を表示"
+              />
+            </div>
+          )}
+
           {showSidebar && (
             <AppSidebar
               selectedBoard={selectedBoard}
