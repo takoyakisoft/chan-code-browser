@@ -1,11 +1,11 @@
+
 import { useEffect, useState, useRef } from "react";
-import { MessageSquare, User, Calendar, ArrowUp, ArrowDown } from "lucide-react";
 import { Thread, Post } from "@/pages/Index";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
 import { DraggableTabs, TabItem } from "@/components/DraggableTabs";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import { ThreadHeader } from "@/components/ThreadHeader";
+import { ThreadContent } from "@/components/ThreadContent";
+import { ThreadChart } from "@/components/ThreadChart";
+import { ThreadFloatingButtons } from "@/components/ThreadFloatingButtons";
 
 interface ThreadViewProps {
   thread: Thread | null;
@@ -47,13 +47,6 @@ const generateMomentumData = (posts: Post[]) => {
     time,
     momentum: count
   })).sort((a, b) => parseInt(a.time) - parseInt(b.time));
-};
-
-const chartConfig = {
-  momentum: {
-    label: "勢い",
-    color: "#007acc",
-  },
 };
 
 export function ThreadView({ 
@@ -124,160 +117,36 @@ export function ThreadView({
         maxTitleLength={30}
       />
       
-      <div className={`p-4 border-b flex items-start justify-between ${isDarkMode ? 'border-[#3e3e42] bg-[#2d2d30]' : 'border-gray-300 bg-gray-100'}`}>
-        <div className="flex-1 min-w-0">
-          <h1 className={`font-medium mb-1 ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>
-            {thread ? thread.title : 'スレッド未指定'}
-          </h1>
-          <div className={`flex items-center gap-4 text-xs ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
-            {thread ? (
-              <>
-                <span className="flex items-center gap-1">
-                  <MessageSquare className="h-3 w-3" />
-                  {posts.length} レス
-                </span>
-                <span className="flex items-center gap-1">
-                  <Calendar className="h-3 w-3" />
-                  {new Date(thread.lastModified).toLocaleString('ja-JP')}
-                </span>
-              </>
-            ) : (
-              <span>スレッドを選択してください</span>
-            )}
-          </div>
-        </div>
-        <div className="flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClose}
-            className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
-          >
-            <MessageSquare className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
+      <ThreadHeader 
+        thread={thread}
+        posts={posts}
+        isDarkMode={isDarkMode}
+        onClose={onClose}
+      />
       
       <div className="flex-1 flex flex-col min-h-0 relative">
-        <ScrollArea className="flex-1" ref={scrollAreaRef}>
-          {!thread ? (
-            <div className={`h-full flex items-center justify-center ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
-              <div className="text-center">
-                <MessageSquare className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                <p>スレッドを選択してください</p>
-              </div>
-            </div>
-          ) : (
-            <div className="p-4 space-y-4">
-              {posts.map((post) => (
-                <div key={post.id} className={`border-l-2 pl-4 ${isDarkMode ? 'border-[#3e3e42]' : 'border-gray-300'}`}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-sm font-medium text-[#007acc]">{post.id}</span>
-                    <div className={`flex items-center gap-1 text-xs ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
-                      <User className="h-3 w-3" />
-                      <span>{post.name}</span>
-                    </div>
-                    <span className={`text-xs ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
-                      {new Date(post.date).toLocaleString('ja-JP')}
-                    </span>
-                  </div>
-                  
-                  <div className={`text-sm whitespace-pre-wrap leading-relaxed ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>
-                    {post.content}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </ScrollArea>
+        <ThreadContent 
+          thread={thread}
+          posts={posts}
+          isDarkMode={isDarkMode}
+          ref={scrollAreaRef}
+        />
         
-        {showChart && thread && (
-          <div className={`border-t ${isDarkMode ? 'border-[#3e3e42] bg-[#1e1e1e]' : 'border-gray-300 bg-white'}`}>
-            <div className={`p-3 border-b ${isDarkMode ? 'border-[#3e3e42]' : 'border-gray-300'}`}>
-              <div className="flex justify-between items-center">
-                <h3 className={`text-sm font-medium ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>
-                  書き込み勢い
-                </h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowChart(false)}
-                  className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
-                >
-                  ×
-                </Button>
-              </div>
-            </div>
-            <div className="p-3 h-48">
-              <ChartContainer config={chartConfig} className="h-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={momentumData}>
-                    <XAxis 
-                      dataKey="time" 
-                      fontSize={10}
-                      tick={{ fill: isDarkMode ? '#6a6a6a' : '#666' }}
-                    />
-                    <YAxis 
-                      fontSize={10}
-                      tick={{ fill: isDarkMode ? '#6a6a6a' : '#666' }}
-                    />
-                    <ChartTooltip 
-                      content={<ChartTooltipContent />}
-                      cursor={{ stroke: isDarkMode ? '#3e3e42' : '#ddd' }}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="momentum" 
-                      stroke="#007acc" 
-                      strokeWidth={2}
-                      dot={{ fill: '#007acc', strokeWidth: 2, r: 3 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </ChartContainer>
-            </div>
-          </div>
-        )}
+        <ThreadChart 
+          showChart={showChart}
+          setShowChart={setShowChart}
+          momentumData={momentumData}
+          isDarkMode={isDarkMode}
+        />
 
         {thread && (
-          <div className="absolute bottom-4 right-4 flex flex-col gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowChart(!showChart)}
-              className={`h-8 w-8 p-0 rounded-full shadow-lg ${
-                isDarkMode 
-                  ? 'bg-[#2d2d30] border-[#3e3e42] text-[#cccccc] hover:bg-[#3e3e42]' 
-                  : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              📊
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={scrollToTop}
-              className={`h-8 w-8 p-0 rounded-full shadow-lg ${
-                isDarkMode 
-                  ? 'bg-[#2d2d30] border-[#3e3e42] text-[#cccccc] hover:bg-[#3e3e42]' 
-                  : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              <ArrowUp className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={scrollToBottom}
-              className={`h-8 w-8 p-0 rounded-full shadow-lg ${
-                isDarkMode 
-                  ? 'bg-[#2d2d30] border-[#3e3e42] text-[#cccccc] hover:bg-[#3e3e42]' 
-                  : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              <ArrowDown className="h-4 w-4" />
-            </Button>
-          </div>
+          <ThreadFloatingButtons 
+            showChart={showChart}
+            setShowChart={setShowChart}
+            onScrollToTop={scrollToTop}
+            onScrollToBottom={scrollToBottom}
+            isDarkMode={isDarkMode}
+          />
         )}
       </div>
     </div>
