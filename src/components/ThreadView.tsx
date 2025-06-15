@@ -91,6 +91,25 @@ export function ThreadView({
     onThreadTabReorder(reorderedThreads);
   };
 
+  // スクロール関数を適切な位置に定義
+  const scrollToTop = () => {
+    if (scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (viewport) {
+        viewport.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  };
+
+  const scrollToBottom = () => {
+    if (scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (viewport) {
+        viewport.scrollTo({ top: viewport.scrollHeight, behavior: 'smooth' });
+      }
+    }
+  };
+
   // showChart/setShowChartが未定義の場合のフォールバック関数
   const effectiveSetShowChart = setShowChart || (() => {});
   const effectiveShowChart = typeof showChart === "boolean" ? showChart : false;
@@ -157,22 +176,4 @@ export function ThreadView({
       </ResizablePanelGroup>
     </div>
   );
-
-  function scrollToTop() {
-    if (scrollAreaRef.current) {
-      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
-      if (viewport) {
-        viewport.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    }
-  }
-
-  function scrollToBottom() {
-    if (scrollAreaRef.current) {
-      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
-      if (viewport) {
-        viewport.scrollTo({ top: viewport.scrollHeight, behavior: 'smooth' });
-      }
-    }
-  }
 }
