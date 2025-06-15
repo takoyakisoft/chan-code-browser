@@ -42,6 +42,22 @@ const Index = () => {
   // レイアウト: "horizontal"=横並び, "vertical"=上下
   const [threadPanelLayout, setThreadPanelLayout] = useState<"horizontal" | "vertical">("horizontal");
 
+  // 板選択時の処理（スレッド一覧を自動表示）
+  const handleBoardSelect = (board: Board) => {
+    setSelectedBoard(board);
+    if (!showThreadList) {
+      setShowThreadList(true);
+    }
+  };
+
+  // スレッド選択時の処理（コメント一覧を自動表示）
+  const handleThreadSelect = (thread: Thread) => {
+    setSelectedThread(thread);
+    if (!showThreadView) {
+      setShowThreadView(true);
+    }
+  };
+
   // --- パネルのサイズロジック
   const getSidebarSize = () => (showThreadList ? 15 : 25);
   const getThreadListSize = () => (showThreadView ? 25 : 100);
@@ -74,7 +90,7 @@ const Index = () => {
                   <div className={`h-full border-r ${isDarkMode ? 'border-[#3e3e42] bg-[#252526]' : 'border-gray-300 bg-gray-50'}`}>
                     <BoardList
                       selectedBoard={selectedBoard}
-                      onBoardSelect={setSelectedBoard}
+                      onBoardSelect={handleBoardSelect}
                       isDarkMode={isDarkMode}
                       onClose={() => setShowSidebar(false)}
                     />
@@ -97,7 +113,7 @@ const Index = () => {
                             <ThreadList
                               board={selectedBoard}
                               selectedThread={selectedThread}
-                              onThreadSelect={setSelectedThread}
+                              onThreadSelect={handleThreadSelect}
                               isDarkMode={isDarkMode}
                               onClose={() => setShowThreadList(false)}
                             />
@@ -147,7 +163,7 @@ const Index = () => {
                             <ThreadList
                               board={selectedBoard}
                               selectedThread={selectedThread}
-                              onThreadSelect={setSelectedThread}
+                              onThreadSelect={handleThreadSelect}
                               isDarkMode={isDarkMode}
                               onClose={() => setShowThreadList(false)}
                             />
