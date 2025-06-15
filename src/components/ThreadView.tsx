@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef } from "react";
 import { Thread, Post } from "@/pages/Index";
 import { DraggableTabs, TabItem } from "@/components/DraggableTabs";
@@ -61,7 +60,7 @@ export function ThreadView({
   onThreadTabClose,
   onThreadTabReorder,
   showChart = false,
-  setShowChart
+  setShowChart,
 }: ThreadViewProps) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [momentumData, setMomentumData] = useState<Array<{time: string, momentum: number}>>([]);
@@ -92,31 +91,26 @@ export function ThreadView({
     onThreadTabReorder(reorderedThreads);
   };
 
-  const scrollToTop = () => {
-    if (scrollAreaRef.current) {
-      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
-      if (viewport) {
-        viewport.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    }
-  };
-
-  const scrollToBottom = () => {
-    if (scrollAreaRef.current) {
-      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
-      if (viewport) {
-        viewport.scrollTo({ top: viewport.scrollHeight, behavior: 'smooth' });
-      }
-    }
-  };
+  // showChart/setShowChartが未定義の場合のフォールバック関数
+  const effectiveSetShowChart = setShowChart || (() => {});
+  const effectiveShowChart = typeof showChart === "boolean" ? showChart : false;
 
   return (
     <div className="h-full flex flex-col">
       <DraggableTabs
-        tabs={threadTabItems}
+        tabs={threadTabs.map(tab => ({
+          id: tab.id,
+          title: tab.title,
+          isActive: thread?.id === tab.id
+        }))}
         onTabClick={onThreadTabClick}
         onTabClose={onThreadTabClose}
-        onTabReorder={handleThreadTabReorderWrapper}
+        onTabReorder={tabItems => {
+          const reorderedThreads = tabItems.map(item => 
+            threadTabs.find(thread => thread.id === item.id)!
+          );
+          onThreadTabReorder(reorderedThreads);
+        }}
         isDarkMode={isDarkMode}
         maxTitleLength={30}
       />
@@ -129,7 +123,7 @@ export function ThreadView({
       />
       
       <ResizablePanelGroup direction="vertical" className="flex-1 min-h-0">
-        <ResizablePanel defaultSize={showChart ? 60 : 100} minSize={30}>
+        <ResizablePanel defaultSize={effectiveShowChart ? 60 : 100} minSize={30}>
           <div className="h-full relative">
             <ThreadContent 
               thread={thread}
@@ -137,11 +131,10 @@ export function ThreadView({
               isDarkMode={isDarkMode}
               ref={scrollAreaRef}
             />
-
             {thread && (
               <ThreadFloatingButtons 
-                showChart={showChart}
-                setShowChart={setShowChart || (() => {})}
+                showChart={effectiveShowChart}
+                setShowChart={effectiveSetShowChart}
                 onScrollToTop={scrollToTop}
                 onScrollToBottom={scrollToBottom}
                 isDarkMode={isDarkMode}
@@ -150,13 +143,13 @@ export function ThreadView({
           </div>
         </ResizablePanel>
 
-        {showChart && setShowChart && (
+        {effectiveShowChart && setShowChart && (
           <>
             <ResizableHandle />
             <ResizablePanel defaultSize={40} minSize={20} maxSize={70}>
               <ThreadChart 
-                showChart={showChart}
-                setShowChart={setShowChart}
+                showChart={effectiveShowChart}
+                setShowChart={effectiveSetShowChart}
                 momentumData={momentumData}
                 isDarkMode={isDarkMode}
               />
@@ -166,4 +159,22 @@ export function ThreadView({
       </ResizablePanelGroup>
     </div>
   );
+
+  function scrollToTop() {
+    if (scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (viewport) {
+        viewport.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  }
+
+  function scrollToBottom() {
+    if (scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (viewport) {
+        viewport.scrollTo({ top: viewport.scrollHeight, behavior: 'smooth' });
+      }
+    }
+  }
 }
