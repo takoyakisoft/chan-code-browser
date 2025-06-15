@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useRef } from "react";
 import { Thread, Post } from "@/pages/Index";
 import { DraggableTabs, TabItem } from "@/components/DraggableTabs";
@@ -139,8 +140,8 @@ export function ThreadView({
 
             {thread && (
               <ThreadFloatingButtons 
-                showChart={false}
-                setShowChart={() => {}}
+                showChart={showChart}
+                setShowChart={setShowChart || (() => {})}
                 onScrollToTop={scrollToTop}
                 onScrollToBottom={scrollToBottom}
                 isDarkMode={isDarkMode}
