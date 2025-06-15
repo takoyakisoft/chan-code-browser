@@ -1,4 +1,3 @@
-
 import {
   Menubar,
   MenubarContent,
@@ -9,6 +8,7 @@ import {
 } from "@/components/ui/menubar";
 import { FileText, Eye, Settings } from "lucide-react";
 import { SettingsDialog } from "./SettingsDialog";
+import { useState } from "react";
 
 interface MenuBarMenuProps {
   showSidebar: boolean;
@@ -33,6 +33,8 @@ export function MenuBarMenu({
   threadPanelLayout,
   setThreadPanelLayout,
 }: MenuBarMenuProps) {
+  const [settingsOpen, setSettingsOpen] = useState(false);
+
   return (
     <>
       <Menubar className={`h-6 ${isDarkMode ? 'bg-transparent border-none' : 'bg-transparent border-none'}`}>
@@ -46,16 +48,13 @@ export function MenuBarMenu({
               新しいタブ
             </MenubarItem>
             <MenubarSeparator className={isDarkMode ? 'bg-[#3e3e42]' : 'bg-gray-300'} />
-            <SettingsDialog
-              trigger={
-                <MenubarItem
-                  className={isDarkMode ? 'text-[#cccccc] hover:bg-[#3e3e42] flex items-center gap-2' : 'text-black hover:bg-gray-100 flex items-center gap-2'}
-                >
-                  <Settings className="h-3 w-3" />
-                  設定
-                </MenubarItem>
-              }
-            />
+            <MenubarItem
+              onClick={() => setSettingsOpen(true)}
+              className={isDarkMode ? 'text-[#cccccc] hover:bg-[#3e3e42] flex items-center gap-2' : 'text-black hover:bg-gray-100 flex items-center gap-2'}
+            >
+              <Settings className="h-3 w-3" />
+              設定
+            </MenubarItem>
           </MenubarContent>
         </MenubarMenu>
         <MenubarMenu>
@@ -93,7 +92,10 @@ export function MenuBarMenu({
           </MenubarContent>
         </MenubarMenu>
       </Menubar>
+      <SettingsDialog 
+        open={settingsOpen} 
+        onOpenChange={setSettingsOpen} 
+      />
     </>
   );
 }
-

@@ -25,7 +25,12 @@ const SERVICES: ServiceField[] = [
   { label: "UPLIFT", key: "uplift" },
 ];
 
-export function SettingsDialog({ trigger }: { trigger: React.ReactNode }) {
+interface SettingsDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
   // ローカルストレージから初期値取得
   const [fields, setFields] = useState(() => {
     const saved = localStorage.getItem("settings");
@@ -39,7 +44,6 @@ export function SettingsDialog({ trigger }: { trigger: React.ReactNode }) {
       uplift_password: "",
     };
   });
-  const [open, setOpen] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFields({ ...fields, [e.target.name]: e.target.value });
@@ -47,12 +51,11 @@ export function SettingsDialog({ trigger }: { trigger: React.ReactNode }) {
 
   const handleSave = () => {
     localStorage.setItem("settings", JSON.stringify(fields));
-    setOpen(false);
+    onOpenChange(false);
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>設定</DialogTitle>
@@ -104,4 +107,3 @@ export function SettingsDialog({ trigger }: { trigger: React.ReactNode }) {
     </Dialog>
   );
 }
-
