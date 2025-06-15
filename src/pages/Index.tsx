@@ -6,6 +6,7 @@ import { ThreadList } from "@/components/ThreadList";
 import { ThreadView } from "@/components/ThreadView";
 import { WritePanel } from "@/components/WritePanel";
 import { MenuBar } from "@/components/MenuBar";
+import { StatusBar } from "@/components/StatusBar";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 
 export interface Board {
@@ -180,6 +181,12 @@ const Index = () => {
           </div>
         </div>
       </SidebarProvider>
+
+      <StatusBar 
+        selectedBoard={selectedBoard}
+        selectedThread={selectedThread}
+        isDarkMode={isDarkMode}
+      />
     </div>
   );
 };
