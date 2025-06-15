@@ -1,6 +1,5 @@
-
-import { useEffect, useState } from "react";
-import { MessageCircle, Clock, X, List } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
+import { MessageCircle, Clock, X, List, ArrowUp, ArrowDown } from "lucide-react";
 import { Board, Thread } from "@/pages/Index";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -44,6 +43,7 @@ export function ThreadList({
   onBoardTabReorder
 }: ThreadListProps) {
   const [threads, setThreads] = useState<Thread[]>([]);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (board) {
@@ -68,8 +68,26 @@ export function ThreadList({
     onBoardTabReorder(reorderedBoards);
   };
 
+  const scrollToTop = () => {
+    if (scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (viewport) {
+        viewport.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  };
+
+  const scrollToBottom = () => {
+    if (scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (viewport) {
+        viewport.scrollTo({ top: viewport.scrollHeight, behavior: 'smooth' });
+      }
+    }
+  };
+
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col relative">
       <DraggableTabs
         tabs={boardTabItems}
         onTabClick={onBoardTabClick}
@@ -97,7 +115,7 @@ export function ThreadList({
         </Button>
       </div>
       
-      <ScrollArea className="flex-1">
+      <ScrollArea className="flex-1" ref={scrollAreaRef}>
         {!board ? (
           <div className={`h-full flex items-center justify-center ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
             <div className="text-center">
@@ -136,6 +154,35 @@ export function ThreadList({
           </div>
         )}
       </ScrollArea>
+
+      {board && (
+        <div className="absolute bottom-4 right-4 flex flex-col gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={scrollToTop}
+            className={`h-8 w-8 p-0 rounded-full shadow-lg ${
+              isDarkMode 
+                ? 'bg-[#2d2d30] border-[#3e3e42] text-[#cccccc] hover:bg-[#3e3e42]' 
+                : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'
+            }`}
+          >
+            <ArrowUp className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={scrollToBottom}
+            className={`h-8 w-8 p-0 rounded-full shadow-lg ${
+              isDarkMode 
+                ? 'bg-[#2d2d30] border-[#3e3e42] text-[#cccccc] hover:bg-[#3e3e42]' 
+                : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'
+            }`}
+          >
+            <ArrowDown className="h-4 w-4" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

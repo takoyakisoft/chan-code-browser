@@ -1,6 +1,7 @@
 
-import { Folder, List, MessageSquare, Edit, Moon, Sun, GitBranch } from "lucide-react";
+import { Folder, List, MessageSquare, Edit, Moon, Sun, GitBranch, BarChart3 } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 
 interface PanelTogglesProps {
   showSidebar: boolean;
@@ -15,6 +16,8 @@ interface PanelTogglesProps {
   setIsDarkMode: (dark: boolean) => void;
   isRedditMode: boolean;
   setIsRedditMode: (mode: boolean) => void;
+  showChart?: boolean;
+  setShowChart?: (show: boolean) => void;
 }
 
 export function PanelToggles({
@@ -30,74 +33,130 @@ export function PanelToggles({
   setIsDarkMode,
   isRedditMode,
   setIsRedditMode,
+  showChart,
+  setShowChart,
 }: PanelTogglesProps) {
   return (
-    <>
-      <Toggle 
-        pressed={showSidebar}
-        onPressedChange={setShowSidebar}
-        size="sm"
-        className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
-        title="板一覧"
-      >
-        <Folder className="h-3 w-3" />
-      </Toggle>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Toggle 
+            pressed={showSidebar}
+            onPressedChange={setShowSidebar}
+            size="sm"
+            className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
+          >
+            <Folder className="h-3 w-3" />
+          </Toggle>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>板一覧</p>
+        </TooltipContent>
+      </Tooltip>
       
-      <Toggle 
-        pressed={showThreadList}
-        onPressedChange={setShowThreadList}
-        size="sm"
-        className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
-        title="スレッド一覧"
-      >
-        <List className="h-3 w-3" />
-      </Toggle>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Toggle 
+            pressed={showThreadList}
+            onPressedChange={setShowThreadList}
+            size="sm"
+            className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
+          >
+            <List className="h-3 w-3" />
+          </Toggle>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>スレッド一覧</p>
+        </TooltipContent>
+      </Tooltip>
       
-      <Toggle 
-        pressed={showThreadView}
-        onPressedChange={setShowThreadView}
-        size="sm"
-        className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
-        title="コメント一覧"
-      >
-        <MessageSquare className="h-3 w-3" />
-      </Toggle>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Toggle 
+            pressed={showThreadView}
+            onPressedChange={setShowThreadView}
+            size="sm"
+            className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
+          >
+            <MessageSquare className="h-3 w-3" />
+          </Toggle>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>コメント一覧</p>
+        </TooltipContent>
+      </Tooltip>
       
-      <Toggle 
-        pressed={showWritePanel}
-        onPressedChange={setShowWritePanel}
-        size="sm"
-        className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
-        title="書き込みパネル"
-      >
-        <Edit className="h-3 w-3" />
-      </Toggle>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Toggle 
+            pressed={showWritePanel}
+            onPressedChange={setShowWritePanel}
+            size="sm"
+            className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
+          >
+            <Edit className="h-3 w-3" />
+          </Toggle>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>書き込みパネル</p>
+        </TooltipContent>
+      </Tooltip>
 
       <div className={`w-px h-4 ${isDarkMode ? 'bg-[#3e3e42]' : 'bg-gray-300'}`} />
 
-      <Toggle 
-        pressed={isRedditMode}
-        onPressedChange={setIsRedditMode}
-        size="sm"
-        className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
-        title={isRedditMode ? "Reddit形式" : "時系列順"}
-      >
-        <GitBranch className="h-3 w-3" />
-      </Toggle>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Toggle 
+            pressed={isRedditMode}
+            onPressedChange={setIsRedditMode}
+            size="sm"
+            className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
+          >
+            <GitBranch className="h-3 w-3" />
+          </Toggle>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{isRedditMode ? "Reddit形式" : "時系列順"}</p>
+        </TooltipContent>
+      </Tooltip>
+
+      {setShowChart && (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Toggle 
+              pressed={showChart}
+              onPressedChange={setShowChart}
+              size="sm"
+              className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
+            >
+              <BarChart3 className="h-3 w-3" />
+            </Toggle>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>勢いチャート</p>
+          </TooltipContent>
+        </Tooltip>
+      )}
 
       <div className={`w-px h-4 ${isDarkMode ? 'bg-[#3e3e42]' : 'bg-gray-300'}`} />
 
-      <Toggle 
-        pressed={isDarkMode}
-        onPressedChange={setIsDarkMode}
-        size="sm"
-        className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
-        title="ダークモード"
-      >
-        {isDarkMode ? <Moon className="h-3 w-3" /> : <Sun className="h-3 w-3" />}
-      </Toggle>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Toggle 
+            pressed={isDarkMode}
+            onPressedChange={setIsDarkMode}
+            size="sm"
+            className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
+          >
+            {isDarkMode ? <Moon className="h-3 w-3" /> : <Sun className="h-3 w-3" />}
+          </Toggle>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>ダークモード</p>
+        </TooltipContent>
+      </Tooltip>
 
       <div className={`w-px h-4 ${isDarkMode ? 'bg-[#3e3e42]' : 'bg-gray-300'}`} />
-    </>
+    </TooltipProvider>
   );
 }

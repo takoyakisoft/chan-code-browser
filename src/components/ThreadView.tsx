@@ -1,6 +1,5 @@
-
-import { useEffect, useState } from "react";
-import { MessageSquare, User, Calendar, BarChart3 } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
+import { MessageSquare, User, Calendar, ArrowUp, ArrowDown } from "lucide-react";
 import { Thread, Post } from "@/pages/Index";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -69,6 +68,7 @@ export function ThreadView({
   const [posts, setPosts] = useState<Post[]>([]);
   const [showChart, setShowChart] = useState(false);
   const [momentumData, setMomentumData] = useState<Array<{time: string, momentum: number}>>([]);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (thread) {
@@ -93,6 +93,24 @@ export function ThreadView({
       threadTabs.find(thread => thread.id === item.id)!
     );
     onThreadTabReorder(reorderedThreads);
+  };
+
+  const scrollToTop = () => {
+    if (scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (viewport) {
+        viewport.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  };
+
+  const scrollToBottom = () => {
+    if (scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (viewport) {
+        viewport.scrollTo({ top: viewport.scrollHeight, behavior: 'smooth' });
+      }
+    }
   };
 
   return (
@@ -132,15 +150,6 @@ export function ThreadView({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => setShowChart(!showChart)}
-            className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
-            title="勢いチャート"
-          >
-            <BarChart3 className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
             onClick={onClose}
             className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
           >
@@ -149,8 +158,8 @@ export function ThreadView({
         </div>
       </div>
       
-      <div className="flex-1 flex min-h-0">
-        <ScrollArea className="flex-1">
+      <div className="flex-1 flex flex-col min-h-0 relative">
+        <ScrollArea className="flex-1" ref={scrollAreaRef}>
           {!thread ? (
             <div className={`h-full flex items-center justify-center ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
               <div className="text-center">
@@ -183,13 +192,23 @@ export function ThreadView({
         </ScrollArea>
         
         {showChart && thread && (
-          <div className={`w-64 border-l ${isDarkMode ? 'border-[#3e3e42] bg-[#1e1e1e]' : 'border-gray-300 bg-white'}`}>
+          <div className={`border-t ${isDarkMode ? 'border-[#3e3e42] bg-[#1e1e1e]' : 'border-gray-300 bg-white'}`}>
             <div className={`p-3 border-b ${isDarkMode ? 'border-[#3e3e42]' : 'border-gray-300'}`}>
-              <h3 className={`text-sm font-medium ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>
-                書き込み勢い
-              </h3>
+              <div className="flex justify-between items-center">
+                <h3 className={`text-sm font-medium ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>
+                  書き込み勢い
+                </h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowChart(false)}
+                  className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
+                >
+                  ×
+                </Button>
+              </div>
             </div>
-            <div className="p-3 h-full">
+            <div className="p-3 h-48">
               <ChartContainer config={chartConfig} className="h-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={momentumData}>
@@ -217,6 +236,47 @@ export function ThreadView({
                 </ResponsiveContainer>
               </ChartContainer>
             </div>
+          </div>
+        )}
+
+        {thread && (
+          <div className="absolute bottom-4 right-4 flex flex-col gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowChart(!showChart)}
+              className={`h-8 w-8 p-0 rounded-full shadow-lg ${
+                isDarkMode 
+                  ? 'bg-[#2d2d30] border-[#3e3e42] text-[#cccccc] hover:bg-[#3e3e42]' 
+                  : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'
+              }`}
+            >
+              📊
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={scrollToTop}
+              className={`h-8 w-8 p-0 rounded-full shadow-lg ${
+                isDarkMode 
+                  ? 'bg-[#2d2d30] border-[#3e3e42] text-[#cccccc] hover:bg-[#3e3e42]' 
+                  : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'
+              }`}
+            >
+              <ArrowUp className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={scrollToBottom}
+              className={`h-8 w-8 p-0 rounded-full shadow-lg ${
+                isDarkMode 
+                  ? 'bg-[#2d2d30] border-[#3e3e42] text-[#cccccc] hover:bg-[#3e3e42]' 
+                  : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'
+              }`}
+            >
+              <ArrowDown className="h-4 w-4" />
+            </Button>
           </div>
         )}
       </div>
