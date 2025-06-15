@@ -1,5 +1,5 @@
 
-import { Folder, MessageSquare, X } from "lucide-react";
+import { Folder, MessageSquare } from "lucide-react";
 import { Board } from "@/pages/Index";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,7 @@ export function BoardList({ selectedBoard, onBoardSelect, isDarkMode, onClose }:
     <div className="h-full flex flex-col">
       <div className={`p-3 border-b flex items-center justify-between ${isDarkMode ? 'border-[#3e3e42] bg-[#2d2d30]' : 'border-gray-300 bg-gray-100'}`}>
         <div className="flex items-center gap-2">
-          <MessageSquare className="h-5 w-5 text-[#007acc]" />
+          <Folder className="h-5 w-5 text-[#007acc]" />
           <span className={`font-semibold ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>2ch Browser</span>
         </div>
         <Button
@@ -36,7 +36,7 @@ export function BoardList({ selectedBoard, onBoardSelect, isDarkMode, onClose }:
           onClick={onClose}
           className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
         >
-          <X className="h-4 w-4" />
+          <Folder className="h-4 w-4" />
         </Button>
       </div>
 

@@ -1,5 +1,5 @@
 
-import { ChevronLeft, ChevronRight, Menu, Settings } from "lucide-react";
+import { Folder, List, MessageSquare, Edit, Moon, Sun } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
 
 interface PanelTogglesProps {
@@ -36,7 +36,7 @@ export function PanelToggles({
         className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
         title="板一覧"
       >
-        <ChevronLeft className="h-3 w-3" />
+        <Folder className="h-3 w-3" />
       </Toggle>
       
       <Toggle 
@@ -46,7 +46,7 @@ export function PanelToggles({
         className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
         title="スレッド一覧"
       >
-        <Menu className="h-3 w-3" />
+        <List className="h-3 w-3" />
       </Toggle>
       
       <Toggle 
@@ -56,7 +56,7 @@ export function PanelToggles({
         className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
         title="コメント一覧"
       >
-        <ChevronRight className="h-3 w-3" />
+        <MessageSquare className="h-3 w-3" />
       </Toggle>
       
       <Toggle 
@@ -66,7 +66,7 @@ export function PanelToggles({
         className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
         title="書き込みパネル"
       >
-        <Settings className="h-3 w-3" />
+        <Edit className="h-3 w-3" />
       </Toggle>
 
       <div className={`w-px h-4 ${isDarkMode ? 'bg-[#3e3e42]' : 'bg-gray-300'}`} />
@@ -78,7 +78,7 @@ export function PanelToggles({
         className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
         title="ダークモード"
       >
-        <span className="text-xs">🌙</span>
+        {isDarkMode ? <Moon className="h-3 w-3" /> : <Sun className="h-3 w-3" />}
       </Toggle>
 
       <div className={`w-px h-4 ${isDarkMode ? 'bg-[#3e3e42]' : 'bg-gray-300'}`} />

@@ -1,6 +1,5 @@
-
 import { useEffect, useState } from "react";
-import { MessageCircle, Clock, X } from "lucide-react";
+import { MessageCircle, Clock, X, List } from "lucide-react";
 import { Board, Thread } from "@/pages/Index";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -63,7 +62,7 @@ export function ThreadList({ board, selectedThread, onThreadSelect, isDarkMode, 
           onClick={onClose}
           className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
         >
-          <X className="h-4 w-4" />
+          <List className="h-4 w-4" />
         </Button>
       </div>
       

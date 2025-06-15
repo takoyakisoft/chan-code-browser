@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Send, Minimize2, Maximize2, X } from "lucide-react";
+import { Send, Edit, X } from "lucide-react";
 import { Thread } from "@/pages/Index";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,6 @@ interface WritePanelProps {
 export function WritePanel({ thread, isDarkMode, onClose }: WritePanelProps) {
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
-  const [isMinimized, setIsMinimized] = useState(false);
 
   const handleSubmit = () => {
     if (!thread || !content.trim()) return;
@@ -24,34 +23,6 @@ export function WritePanel({ thread, isDarkMode, onClose }: WritePanelProps) {
     setContent("");
   };
 
-  if (isMinimized) {
-    return (
-      <div className={`h-full border-t flex items-center justify-between px-4 ${
-        isDarkMode ? 'bg-[#252526] border-[#3e3e42]' : 'bg-gray-50 border-gray-300'
-      }`}>
-        <span className={`text-sm ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>書き込みパネル（最小化）</span>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsMinimized(false)}
-            className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
-          >
-            <Maximize2 className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClose}
-            className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
-          >
-            <X className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className={`h-full border-t flex flex-col ${
       isDarkMode ? 'bg-[#252526] border-[#3e3e42]' : 'bg-gray-50 border-gray-300'
@@ -59,25 +30,18 @@ export function WritePanel({ thread, isDarkMode, onClose }: WritePanelProps) {
       <div className={`p-3 border-b flex items-center justify-between ${
         isDarkMode ? 'border-[#3e3e42] bg-[#2d2d30]' : 'border-gray-300 bg-gray-100'
       }`}>
-        <h3 className={`font-medium ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>書き込み</h3>
         <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsMinimized(true)}
-            className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
-          >
-            <Minimize2 className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClose}
-            className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
-          >
-            <X className="h-4 w-4" />
-          </Button>
+          <Edit className="h-4 w-4 text-[#007acc]" />
+          <h3 className={`font-medium ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>書き込み</h3>
         </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onClose}
+          className={`h-6 w-6 p-0 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
+        >
+          <Edit className="h-4 w-4" />
+        </Button>
       </div>
 
       {!thread ? (

@@ -1,4 +1,3 @@
-
 import {
   Menubar,
   MenubarContent,
@@ -7,6 +6,7 @@ import {
   MenubarSeparator,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import { FileText, X } from "lucide-react";
 
 interface MenuBarMenuProps {
   showSidebar: boolean;
@@ -34,7 +34,8 @@ export function MenuBarMenu({
   return (
     <Menubar className={`h-6 ${isDarkMode ? 'bg-transparent border-none' : 'bg-transparent border-none'}`}>
       <MenubarMenu>
-        <MenubarTrigger className={`text-xs px-2 py-1 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#3e3e42]' : 'text-black hover:bg-gray-200'}`}>
+        <MenubarTrigger className={`text-xs px-2 py-1 flex items-center gap-1 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#3e3e42]' : 'text-black hover:bg-gray-200'}`}>
+          <FileText className="h-3 w-3" />
           ファイル
         </MenubarTrigger>
         <MenubarContent className={isDarkMode ? 'bg-[#252526] border-[#3e3e42]' : 'bg-white border-gray-300'}>
@@ -49,7 +50,8 @@ export function MenuBarMenu({
       </MenubarMenu>
 
       <MenubarMenu>
-        <MenubarTrigger className={`text-xs px-2 py-1 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#3e3e42]' : 'text-black hover:bg-gray-200'}`}>
+        <MenubarTrigger className={`text-xs px-2 py-1 flex items-center gap-1 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#3e3e42]' : 'text-black hover:bg-gray-200'}`}>
+          <X className="h-3 w-3" />
           表示
         </MenubarTrigger>
         <MenubarContent className={isDarkMode ? 'bg-[#252526] border-[#3e3e42]' : 'bg-white border-gray-300'}>

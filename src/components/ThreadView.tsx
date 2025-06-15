@@ -72,7 +72,7 @@ export function ThreadView({ thread, isDarkMode, onClose }: ThreadViewProps) {
           onClick={onClose}
           className={`h-6 w-6 p-0 ml-2 ${isDarkMode ? 'text-[#cccccc] hover:bg-[#2a2d2e]' : 'text-gray-700 hover:bg-gray-200'}`}
         >
-          <X className="h-4 w-4" />
+          <MessageSquare className="h-4 w-4" />
         </Button>
       </div>
       
