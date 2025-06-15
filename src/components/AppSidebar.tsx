@@ -12,6 +12,7 @@ import {
   SidebarHeader,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Board } from "@/pages/Index";
 import { Button } from "@/components/ui/button";
 
@@ -61,26 +62,28 @@ export function AppSidebar({ selectedBoard, onBoardSelect, isDarkMode }: AppSide
           </SidebarGroupLabel>
           
           <SidebarGroupContent>
-            <SidebarMenu>
-              {boards.map((board) => (
-                <SidebarMenuItem key={board.id}>
-                  <SidebarMenuButton
-                    onClick={() => onBoardSelect(board)}
-                    className={`w-full text-left px-2 py-1 text-sm ${
-                      isDarkMode ? 'hover:bg-[#2a2d2e]' : 'hover:bg-gray-200'
-                    } ${
-                      selectedBoard?.id === board.id 
-                        ? (isDarkMode ? "bg-[#094771] text-white" : "bg-blue-100 text-blue-900")
-                        : (isDarkMode ? "text-[#cccccc]" : "text-gray-700")
-                    }`}
-                    tooltip={isCollapsed ? board.name : undefined}
-                  >
-                    <span className={isCollapsed ? "sr-only" : "truncate"}>{board.name}</span>
-                    {isCollapsed && <span className="text-xs">{board.name.charAt(0)}</span>}
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+            <ScrollArea className="h-full">
+              <SidebarMenu>
+                {boards.map((board) => (
+                  <SidebarMenuItem key={board.id}>
+                    <SidebarMenuButton
+                      onClick={() => onBoardSelect(board)}
+                      className={`w-full text-left px-2 py-1 text-sm ${
+                        isDarkMode ? 'hover:bg-[#2a2d2e]' : 'hover:bg-gray-200'
+                      } ${
+                        selectedBoard?.id === board.id 
+                          ? (isDarkMode ? "bg-[#094771] text-white" : "bg-blue-100 text-blue-900")
+                          : (isDarkMode ? "text-[#cccccc]" : "text-gray-700")
+                      }`}
+                      tooltip={isCollapsed ? board.name : undefined}
+                    >
+                      <span className={isCollapsed ? "sr-only" : "truncate"}>{board.name}</span>
+                      {isCollapsed && <span className="text-xs">{board.name.charAt(0)}</span>}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </ScrollArea>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

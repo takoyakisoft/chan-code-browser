@@ -4,6 +4,7 @@ import { Send, Minimize2, Maximize2 } from "lucide-react";
 import { Thread } from "@/pages/Index";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface WritePanelProps {
   thread: Thread | null;
@@ -65,47 +66,49 @@ export function WritePanel({ thread, isDarkMode }: WritePanelProps) {
           <p>スレッドを選択してください</p>
         </div>
       ) : (
-        <div className="flex-1 p-4 flex flex-col gap-3">
-          <div className={`text-sm ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-600'}`}>
-            {thread.title}
-          </div>
-          
-          <div className="flex gap-2">
-            <input
-              type="text"
-              placeholder="名前（省略可）"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className={`px-3 py-1 text-sm border rounded w-48 focus:outline-none focus:border-[#007acc] ${
+        <ScrollArea className="flex-1">
+          <div className="p-4 flex flex-col gap-3">
+            <div className={`text-sm ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-600'}`}>
+              {thread.title}
+            </div>
+            
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="名前（省略可）"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className={`px-3 py-1 text-sm border rounded w-48 focus:outline-none focus:border-[#007acc] ${
+                  isDarkMode 
+                    ? 'bg-[#3c3c3c] border-[#3e3e42] text-[#cccccc] placeholder-[#6a6a6a]'
+                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                }`}
+              />
+            </div>
+
+            <Textarea
+              placeholder="書き込み内容を入力..."
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              className={`min-h-32 resize-none focus:border-[#007acc] ${
                 isDarkMode 
                   ? 'bg-[#3c3c3c] border-[#3e3e42] text-[#cccccc] placeholder-[#6a6a6a]'
                   : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
               }`}
             />
-          </div>
 
-          <Textarea
-            placeholder="書き込み内容を入力..."
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            className={`flex-1 resize-none focus:border-[#007acc] ${
-              isDarkMode 
-                ? 'bg-[#3c3c3c] border-[#3e3e42] text-[#cccccc] placeholder-[#6a6a6a]'
-                : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-            }`}
-          />
-
-          <div className="flex justify-end">
-            <Button
-              onClick={handleSubmit}
-              disabled={!content.trim()}
-              className="bg-[#007acc] hover:bg-[#005a9e] text-white"
-            >
-              <Send className="h-4 w-4 mr-2" />
-              書き込む
-            </Button>
+            <div className="flex justify-end">
+              <Button
+                onClick={handleSubmit}
+                disabled={!content.trim()}
+                className="bg-[#007acc] hover:bg-[#005a9e] text-white"
+              >
+                <Send className="h-4 w-4 mr-2" />
+                書き込む
+              </Button>
+            </div>
           </div>
-        </div>
+        </ScrollArea>
       )}
     </div>
   );

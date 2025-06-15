@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { MessageCircle, Clock } from "lucide-react";
 import { Board, Thread } from "@/pages/Index";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ThreadListProps {
   board: Board | null;
@@ -54,34 +55,36 @@ export function ThreadList({ board, selectedThread, onThreadSelect, isDarkMode }
         <p className={`text-xs ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>{threads.length} スレッド</p>
       </div>
       
-      <div className="flex-1 overflow-y-auto">
-        {threads.map((thread) => (
-          <div
-            key={thread.id}
-            onClick={() => onThreadSelect(thread)}
-            className={`p-3 border-b cursor-pointer ${
-              isDarkMode 
-                ? `border-[#3e3e42] hover:bg-[#2a2d2e] ${selectedThread?.id === thread.id ? "bg-[#094771]" : ""}`
-                : `border-gray-300 hover:bg-gray-100 ${selectedThread?.id === thread.id ? "bg-blue-100" : ""}`
-            }`}
-          >
-            <div className="flex items-start justify-between gap-2">
-              <h3 className={`text-sm line-clamp-2 flex-1 ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>
-                {thread.title}
-              </h3>
-              <div className={`flex items-center gap-1 text-xs shrink-0 ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
-                <MessageCircle className="h-3 w-3" />
-                {thread.resCount}
+      <ScrollArea className="flex-1">
+        <div className="space-y-0">
+          {threads.map((thread) => (
+            <div
+              key={thread.id}
+              onClick={() => onThreadSelect(thread)}
+              className={`p-3 border-b cursor-pointer ${
+                isDarkMode 
+                  ? `border-[#3e3e42] hover:bg-[#2a2d2e] ${selectedThread?.id === thread.id ? "bg-[#094771]" : ""}`
+                  : `border-gray-300 hover:bg-gray-100 ${selectedThread?.id === thread.id ? "bg-blue-100" : ""}`
+              }`}
+            >
+              <div className="flex items-start justify-between gap-2">
+                <h3 className={`text-sm line-clamp-2 flex-1 ${isDarkMode ? 'text-[#cccccc]' : 'text-gray-900'}`}>
+                  {thread.title}
+                </h3>
+                <div className={`flex items-center gap-1 text-xs shrink-0 ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
+                  <MessageCircle className="h-3 w-3" />
+                  {thread.resCount}
+                </div>
+              </div>
+              
+              <div className={`flex items-center gap-1 mt-1 text-xs ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
+                <Clock className="h-3 w-3" />
+                {new Date(thread.lastModified).toLocaleString('ja-JP')}
               </div>
             </div>
-            
-            <div className={`flex items-center gap-1 mt-1 text-xs ${isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-500'}`}>
-              <Clock className="h-3 w-3" />
-              {new Date(thread.lastModified).toLocaleString('ja-JP')}
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      </ScrollArea>
     </div>
   );
 }
