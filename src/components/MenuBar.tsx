@@ -14,6 +14,8 @@ interface MenuBarProps {
   setShowWritePanel: (show: boolean) => void;
   isDarkMode: boolean;
   setIsDarkMode: (dark: boolean) => void;
+  threadPanelLayout: "horizontal" | "vertical";
+  setThreadPanelLayout: (layout: "horizontal" | "vertical") => void;
 }
 
 export function MenuBar({
@@ -27,11 +29,13 @@ export function MenuBar({
   setShowWritePanel,
   isDarkMode,
   setIsDarkMode,
+  threadPanelLayout,
+  setThreadPanelLayout,
 }: MenuBarProps) {
   return (
     <div className={`h-8 flex items-center justify-between px-2 border-b ${
-      isDarkMode 
-        ? 'bg-[#2d2d30] border-[#3e3e42] text-[#cccccc]' 
+      isDarkMode
+        ? 'bg-[#2d2d30] border-[#3e3e42] text-[#cccccc]'
         : 'bg-gray-100 border-gray-300 text-black'
     }`}>
       {/* Left side - Menu */}
@@ -44,6 +48,8 @@ export function MenuBar({
           showWritePanel={showWritePanel}
           setShowWritePanel={setShowWritePanel}
           isDarkMode={isDarkMode}
+          threadPanelLayout={threadPanelLayout}
+          setThreadPanelLayout={setThreadPanelLayout}
         />
       </div>
 
