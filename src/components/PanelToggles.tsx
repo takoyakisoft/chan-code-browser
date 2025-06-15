@@ -13,6 +13,8 @@ interface PanelTogglesProps {
   setShowWritePanel: (show: boolean) => void;
   isDarkMode: boolean;
   setIsDarkMode: (dark: boolean) => void;
+  isRedditMode: boolean;
+  setIsRedditMode: (mode: boolean) => void;
 }
 
 export function PanelToggles({
@@ -26,6 +28,8 @@ export function PanelToggles({
   setShowWritePanel,
   isDarkMode,
   setIsDarkMode,
+  isRedditMode,
+  setIsRedditMode,
 }: PanelTogglesProps) {
   return (
     <>
@@ -67,6 +71,18 @@ export function PanelToggles({
         title="書き込みパネル"
       >
         <Edit className="h-3 w-3" />
+      </Toggle>
+
+      <div className={`w-px h-4 ${isDarkMode ? 'bg-[#3e3e42]' : 'bg-gray-300'}`} />
+
+      <Toggle 
+        pressed={isRedditMode}
+        onPressedChange={setIsRedditMode}
+        size="sm"
+        className={`h-6 w-8 ${isDarkMode ? 'hover:bg-[#3e3e42]' : 'hover:bg-gray-200'}`}
+        title={isRedditMode ? "Reddit形式" : "時系列順"}
+      >
+        <MessageSquare className="h-3 w-3" />
       </Toggle>
 
       <div className={`w-px h-4 ${isDarkMode ? 'bg-[#3e3e42]' : 'bg-gray-300'}`} />

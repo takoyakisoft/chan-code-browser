@@ -16,6 +16,8 @@ interface MenuBarProps {
   setIsDarkMode: (dark: boolean) => void;
   threadPanelLayout: "horizontal" | "vertical";
   setThreadPanelLayout: (layout: "horizontal" | "vertical") => void;
+  isRedditMode: boolean;
+  setIsRedditMode: (mode: boolean) => void;
 }
 
 export function MenuBar({
@@ -31,6 +33,8 @@ export function MenuBar({
   setIsDarkMode,
   threadPanelLayout,
   setThreadPanelLayout,
+  isRedditMode,
+  setIsRedditMode,
 }: MenuBarProps) {
   return (
     <div className={`h-8 flex items-center justify-between px-2 border-b ${
@@ -71,6 +75,8 @@ export function MenuBar({
           setShowWritePanel={setShowWritePanel}
           isDarkMode={isDarkMode}
           setIsDarkMode={setIsDarkMode}
+          isRedditMode={isRedditMode}
+          setIsRedditMode={setIsRedditMode}
         />
 
         <WindowControls isDarkMode={isDarkMode} />

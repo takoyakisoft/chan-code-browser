@@ -28,9 +28,10 @@ const SERVICES: ServiceField[] = [
 interface SettingsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  isDarkMode: boolean;
 }
 
-export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
+export function SettingsDialog({ open, onOpenChange, isDarkMode }: SettingsDialogProps) {
   // ローカルストレージから初期値取得
   const [fields, setFields] = useState(() => {
     const saved = localStorage.getItem("settings");
@@ -56,10 +57,10 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className={isDarkMode ? 'bg-[#252526] border-[#3e3e42] text-[#cccccc]' : 'bg-white border-gray-300 text-black'}>
         <DialogHeader>
-          <DialogTitle>設定</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className={isDarkMode ? 'text-[#cccccc]' : 'text-black'}>設定</DialogTitle>
+          <DialogDescription className={isDarkMode ? 'text-[#6a6a6a]' : 'text-gray-600'}>
             5ちゃんねる外部サービスのログイン情報を入力してください。
           </DialogDescription>
         </DialogHeader>
@@ -72,9 +73,9 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
         >
           {SERVICES.map((service) => (
             <div key={service.key} className="grid grid-cols-2 gap-3 items-center">
-              <Label className="col-span-2 font-bold">{service.label}</Label>
+              <Label className={`col-span-2 font-bold ${isDarkMode ? 'text-[#cccccc]' : 'text-black'}`}>{service.label}</Label>
               <div>
-                <Label htmlFor={`${service.key}_email`} className="text-xs">メール</Label>
+                <Label htmlFor={`${service.key}_email`} className={`text-xs ${isDarkMode ? 'text-[#cccccc]' : 'text-black'}`}>メール</Label>
                 <Input
                   id={`${service.key}_email`}
                   name={`${service.key}_email`}
@@ -82,11 +83,11 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                   autoComplete="username"
                   value={fields[`${service.key}_email`] || ""}
                   onChange={handleChange}
-                  className="mt-1"
+                  className={`mt-1 ${isDarkMode ? 'bg-[#3e3e42] border-[#6a6a6a] text-[#cccccc]' : 'bg-white border-gray-300 text-black'}`}
                 />
               </div>
               <div>
-                <Label htmlFor={`${service.key}_password`} className="text-xs">パスワード</Label>
+                <Label htmlFor={`${service.key}_password`} className={`text-xs ${isDarkMode ? 'text-[#cccccc]' : 'text-black'}`}>パスワード</Label>
                 <Input
                   id={`${service.key}_password`}
                   name={`${service.key}_password`}
@@ -94,7 +95,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                   autoComplete="current-password"
                   value={fields[`${service.key}_password`] || ""}
                   onChange={handleChange}
-                  className="mt-1"
+                  className={`mt-1 ${isDarkMode ? 'bg-[#3e3e42] border-[#6a6a6a] text-[#cccccc]' : 'bg-white border-gray-300 text-black'}`}
                 />
               </div>
             </div>

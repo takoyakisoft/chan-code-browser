@@ -36,6 +36,7 @@ const Index = () => {
   const [showWritePanel, setShowWritePanel] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [threadPanelLayout, setThreadPanelLayout] = useState<"horizontal" | "vertical">("horizontal");
+  const [isRedditMode, setIsRedditMode] = useState(true);
 
   // Tab management
   const {
@@ -102,6 +103,8 @@ const Index = () => {
         setIsDarkMode={setIsDarkMode}
         threadPanelLayout={threadPanelLayout}
         setThreadPanelLayout={setThreadPanelLayout}
+        isRedditMode={isRedditMode}
+        setIsRedditMode={setIsRedditMode}
       />
 
       <div className="flex-1 flex w-full min-h-0">

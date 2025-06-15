@@ -1,3 +1,4 @@
+
 import {
   Menubar,
   MenubarContent,
@@ -95,6 +96,7 @@ export function MenuBarMenu({
       <SettingsDialog 
         open={settingsOpen} 
         onOpenChange={setSettingsOpen} 
+        isDarkMode={isDarkMode}
       />
     </>
   );
