@@ -30,7 +30,7 @@ properties:
     description: HTML content of the post.
     example: '<p>This is a sample post.<br>With line breaks.</p>'
   posterInfo:
-    $ref: '#/components/schemas/PosterInfo' # Changed to internal document reference
+    $ref: './user.yaml' # Corrected to relative file path
 required:
   - number
   - authorName
