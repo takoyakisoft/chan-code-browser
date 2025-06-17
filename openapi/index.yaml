@@ -1,0 +1,453 @@
+openapi: 3.1.0
+info:
+  title: Sample API
+  version: v1
+  description: A sample API to demonstrate OpenAPI-first approach.
+  contact:
+    name: API Support
+    url: 'http://www.example.com/support'
+    email: support@example.com
+servers:
+  - url: 'http://localhost:3000/api/v1'
+    description: Local development server
+paths:
+  /ping:
+    get:
+      operationId: ping
+      summary: Ping
+      description: A simple endpoint to check if the API is responsive.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: pong
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Health
+  /boards:
+    get:
+      operationId: listBoards
+      summary: List all boards
+      description: Retrieves a list of all available message boards.
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of boards to return.
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 100
+        - name: offset
+          in: query
+          description: Number of boards to skip for pagination.
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+      responses:
+        '200':
+          description: A list of boards.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  paging:
+                    $ref: '#/components/schemas/Paging'
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Board'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Boards
+  '/boards/{boardId}/threads':
+    get:
+      operationId: listThreadsInBoard
+      summary: List threads in a board
+      description: Retrieves a list of threads for a specified board.
+      parameters:
+        - name: boardId
+          in: path
+          description: The ID of the board to retrieve threads from.
+          required: true
+          schema:
+            type: string
+            example: newsplus
+        - name: limit
+          in: query
+          description: Maximum number of threads to return.
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 50
+        - name: offset
+          in: query
+          description: Number of threads to skip for pagination.
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+      responses:
+        '200':
+          description: A list of threads for the specified board.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  paging:
+                    $ref: '#/components/schemas/Paging'
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Thread'
+        '404':
+          description: Board not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Threads
+  '/boards/{boardId}/threads/{threadId}/posts':
+    get:
+      operationId: listPostsInThread
+      summary: List posts in a thread
+      description: Retrieves a list of posts for a specified thread on a board.
+      parameters:
+        - name: boardId
+          in: path
+          description: The ID of the board.
+          required: true
+          schema:
+            type: string
+            example: newsplus
+        - name: threadId
+          in: path
+          description: The ID of the thread.
+          required: true
+          schema:
+            type: string
+            example: '1609459200'
+        - name: limit
+          in: query
+          description: Maximum number of posts to return.
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 100
+        - name: offset
+          in: query
+          description: Number of posts to skip for pagination.
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+      responses:
+        '200':
+          description: A list of posts for the specified thread.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  paging:
+                    $ref: '#/components/schemas/Paging'
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Post'
+        '404':
+          description: Board or Thread not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Posts
+    post:
+      operationId: createPostInThread
+      summary: Create a new post in a thread
+      description: Submits a new post to the specified thread on a board.
+      parameters:
+        - name: boardId
+          in: path
+          description: The ID of the board.
+          required: true
+          schema:
+            type: string
+            example: newsplus
+        - name: threadId
+          in: path
+          description: The ID of the thread.
+          required: true
+          schema:
+            type: string
+            example: '1609459200'
+      requestBody:
+        description: Post content and author information.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                authorName:
+                  description: Name of the poster. Defaults to a default name if not provided.
+                  type: string
+                  example: 名無しさん
+                authorEmail:
+                  description: Email address (often used for 'sage').
+                  type: string
+                  example: sage
+                  nullable: true
+                content:
+                  description: The content of the post.
+                  example: This is my new post!
+                  type: string
+              required:
+                - content
+      responses:
+        '201':
+          description: Post created successfully. Returns the created post.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '400':
+          description: 'Bad request (e.g., validation error, posting rules violation).'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: 'Forbidden (e.g., banned, posting too frequently).'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Board or Thread not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Posts
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        type:
+          description: 'A URI reference [RFC3986] that identifies the problem type.'
+          type: string
+          format: uri
+          example: 'https://example.com/errors/resource-not-found'
+        title:
+          description: 'A short, human-readable summary of the problem type.'
+          type: string
+          example: Resource Not Found
+        status:
+          description: 'The HTTP status code ([RFC7231], Section 6) generated by the origin server for this occurrence of the problem.'
+          type: integer
+          format: int32
+          example: 404
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          type: string
+          example: The requested user '123' was not found.
+        instance:
+          description: A URI reference that identifies the specific occurrence of the problem.
+          type: string
+          format: uri
+          example: 'https://example.com/users/123'
+      required:
+        - type
+        - title
+        - status
+    Paging:
+      description: Provides information for paginated responses.
+      type: object
+      properties:
+        totalCount:
+          description: Total number of items available.
+          type: integer
+          format: int32
+        limit:
+          description: Number of items per page.
+          type: integer
+          format: int32
+        offset:
+          description: Number of items skipped.
+          type: integer
+          format: int32
+      required:
+        - totalCount
+        - limit
+        - offset
+    Board:
+      description: Represents a message board.
+      type: object
+      properties:
+        id:
+          description: 'Unique identifier for the board (e.g., ''newsplus'', ''livejupiter'').'
+          type: string
+          example: newsplus
+        name:
+          description: Display name of the board.
+          type: string
+          example: ニュース速報+
+        server:
+          description: 'Server hostname where the board is located (e.g., ''itest.5ch.net'').'
+          type: string
+          example: itest.5ch.net
+        path:
+          description: 'Path to the board on the server (e.g., ''/newsplus/'').'
+          type: string
+          example: /newsplus/
+        category:
+          description: Category the board belongs to.
+          type: string
+          example: ニュース
+      required:
+        - id
+        - name
+        - server
+        - path
+    Thread:
+      description: Represents a thread on a message board.
+      type: object
+      properties:
+        id:
+          description: 'Unique identifier for the thread (e.g., ''1609459200'', often a Unix timestamp of creation or dat ID).'
+          type: string
+          example: '1609459200'
+        title:
+          description: Title of the thread.
+          type: string
+          example: 【速報】メインタイトル ★1
+        resCount:
+          description: Number of replies (responses) in the thread.
+          type: integer
+          format: int32
+          example: 150
+        lastModified:
+          description: Timestamp of the last post in the thread.
+          type: string
+          format: date-time
+          example: '2023-01-01T12:00:00Z'
+      required:
+        - id
+        - title
+        - resCount
+        - lastModified
+    Post:
+      description: Represents a single post within a thread.
+      type: object
+      properties:
+        number:
+          description: 'The sequential number of the post within the thread (e.g., 1, 2, 3).'
+          type: integer
+          format: int32
+          example: 1
+        authorName:
+          description: Name of the poster.
+          type: string
+          example: 名無しさん
+        authorEmail:
+          description: Email address of the poster (often used for 'sage' or other commands).
+          type: string
+          example: sage
+          nullable: true
+        authorId:
+          description: 'User ID displayed next to the name (can vary, e.g. IP hash, Be ID).'
+          type: string
+          example: 'ID:AbCdEfGh0'
+          nullable: true
+        timestamp:
+          description: Date and time the post was made.
+          type: string
+          format: date-time
+          example: '2023-01-01T12:00:05Z'
+        content:
+          description: HTML content of the post.
+          example: <p>This is a sample post.<br>With line breaks.</p>
+          type: string
+      required:
+        - number
+        - authorName
+        - timestamp
+        - content
+    PosterInfo:
+      description: Information about a user who made a post.
+      type: object
+      properties:
+        id:
+          description: 'An identifier for the user, could be a hash of their IP or a tripcode.'
+          type: string
+          example: tripcode_example
+        name:
+          description: Display name of the poster.
+          type: string
+          example: 名無しさん
+        isBeEnabled:
+          description: Whether the user has Be enabled.
+          type: boolean
+          example: false
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: API Key for authenticated access.
+tags:
+  - name: Health
+    description: API health check operations
+  - name: Boards
+    description: Operations related to message boards
+  - name: Threads
+    description: Operations related to threads within boards
+  - name: Posts
+    description: Operations related to posts within threads

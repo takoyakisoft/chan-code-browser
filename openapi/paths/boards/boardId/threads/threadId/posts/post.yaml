@@ -1,0 +1,74 @@
+summary: Create a new post in a thread
+description: Submits a new post to the specified thread on a board.
+operationId: createPostInThread
+tags:
+  - Posts
+parameters:
+  - name: boardId
+    in: path
+    required: true
+    description: The ID of the board.
+    schema:
+      type: string
+      example: 'newsplus'
+  - name: threadId
+    in: path
+    required: true
+    description: The ID of the thread.
+    schema:
+      type: string
+      example: '1609459200'
+requestBody:
+  description: Post content and author information.
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          authorName:
+            type: string
+            description: Name of the poster. Defaults to a default name if not provided.
+            example: '名無しさん'
+          authorEmail:
+            type: string
+            nullable: true
+            description: Email address (often used for 'sage').
+            example: 'sage'
+          content:
+            type: string
+            description: The content of the post.
+            example: 'This is my new post!'
+        required:
+          - content
+responses:
+  '201':
+    description: Post created successfully. Returns the created post.
+    content:
+      application/json:
+        schema:
+          $ref: '../../../../../../components/schemas/Post.yaml' # Corrected path
+  '400':
+    description: Bad request (e.g., validation error, posting rules violation).
+    content:
+      application/json:
+        schema:
+          $ref: '../../../../../../components/schemas/error.yaml' # Corrected path
+  '403':
+    description: Forbidden (e.g., banned, posting too frequently).
+    content:
+      application/json:
+        schema:
+          $ref: '../../../../../../components/schemas/error.yaml' # Corrected path
+  '404':
+    description: Board or Thread not found.
+    content:
+      application/json:
+        schema:
+          $ref: '../../../../../../components/schemas/error.yaml' # Corrected path
+  default:
+    description: Unexpected error
+    content:
+      application/json:
+        schema:
+          $ref: '../../../../../../components/schemas/error.yaml' # Corrected path

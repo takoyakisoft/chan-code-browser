@@ -1,0 +1,15 @@
+type: object
+description: Information about a user who made a post.
+properties:
+  id:
+    type: string
+    description: An identifier for the user, could be a hash of their IP or a tripcode.
+    example: 'tripcode_example'
+  name:
+    type: string
+    description: Display name of the poster.
+    example: '名無しさん'
+  isBeEnabled: # BE is a specific 5ch user identification system
+    type: boolean
+    description: Whether the user has Be enabled.
+    example: false

@@ -1,0 +1,28 @@
+type: object
+description: Represents a message board.
+properties:
+  id:
+    type: string
+    description: Unique identifier for the board (e.g., 'newsplus', 'livejupiter').
+    example: 'newsplus'
+  name:
+    type: string
+    description: Display name of the board.
+    example: 'ニュース速報+'
+  server:
+    type: string
+    description: Server hostname where the board is located (e.g., 'itest.5ch.net').
+    example: 'itest.5ch.net'
+  path:
+    type: string
+    description: Path to the board on the server (e.g., '/newsplus/').
+    example: '/newsplus/'
+  category:
+    type: string
+    description: Category the board belongs to.
+    example: 'ニュース'
+required:
+  - id
+  - name
+  - server
+  - path

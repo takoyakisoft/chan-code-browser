@@ -1,0 +1,61 @@
+name: OpenAPI CI
+
+on:
+  pull_request:
+    paths:
+      - 'openapi/**' # Only run on changes in the openapi directory
+  push:
+    branches:
+      - main # Or your default branch
+    paths:
+      - 'openapi/**'
+
+jobs:
+  lint-format:
+    name: Lint and Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18' # Specify a Node.js version
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint OpenAPI specification
+        run: npx @stoplight/spectral-cli lint openapi/index.yaml
+
+      - name: Check OpenAPI formatting
+        run: npx openapi-format --check openapi/index.yaml
+
+  build-docs:
+    name: Build API Documentation
+    needs: lint-format # Run after lint-format job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci # Redocly CLI will be installed via devDependencies if added, or npx will fetch it
+
+      - name: Install Redocly CLI
+        run: npm install --save-dev @redocly/cli # Ensure Redocly is available
+
+      - name: Build documentation
+        run: npx @redocly/cli build-docs openapi/index.yaml -o openapi-docs
+
+      - name: Upload documentation artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: openapi-documentation
+          path: openapi-docs
