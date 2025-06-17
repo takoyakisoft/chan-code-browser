@@ -26,3 +26,4 @@ required:
   - name
   - server
   - path
+  - category # Added

@@ -13,3 +13,6 @@ properties:
     type: boolean
     description: Whether the user has Be enabled.
     example: false
+required:
+  - id # Added
+  - name # Added

@@ -1,8 +1,8 @@
 openapi: 3.1.0
 info:
-  title: Sample API # Retain or update from existing index.yaml
+  title: 5ch Browser UI API # Updated
   version: v1 # Retain or update
-  description: A sample API to demonstrate OpenAPI-first approach. # Retain or update
+  description: API specification for the 5ch browser UI, covering boards, threads, and posts. # Updated
   contact: # Ensure this was added from previous validation step
     name: API Support
     url: http://www.example.com/support
@@ -11,7 +11,7 @@ servers: # Ensure this was added from previous validation step
   - url: 'http://localhost:3000/api/v1'
     description: Local development server
   - url: 'https://production.example.com/api/v1'
-    description: Production server
+    description: Production server (example URL) # Updated description
 tags: # Ensure this was added from previous validation step
   - name: Health
     description: API health check operations
@@ -25,19 +25,13 @@ security: # Added global security requirement
   - ApiKeyAuth: []
 paths:
   /ping:
-    get:
-      $ref: './paths/ping.yaml'
+    $ref: './paths/ping.yaml' # Path Item $ref
   /boards:
-    get:
-      $ref: './paths/boards/get.yaml'
+    $ref: './paths/boards.yaml' # Path Item $ref, new file
   /boards/{boardId}/threads:
-    get:
-      $ref: './paths/boards/boardId/threads/get.yaml'
+    $ref: './paths/boards/boardId/threads.yaml' # Path Item $ref, new file
   /boards/{boardId}/threads/{threadId}/posts:
-    get:
-      $ref: './paths/boards/boardId/threads/threadId/posts/get.yaml'
-    post:
-      $ref: './paths/boards/boardId/threads/threadId/posts/post.yaml'
+    $ref: './paths/boards/boardId/threads/threadId/posts.yaml' # Path Item $ref, new consolidated file
 
 components:
   schemas:
