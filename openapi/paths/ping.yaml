@@ -1,0 +1,23 @@
+get:
+  summary: Ping
+  description: A simple endpoint to check if the API is responsive.
+  operationId: ping
+  tags:
+    - Health
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: pong
+    default: # Added default error response
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/error.yaml' # Corrected path relative to ping.yaml

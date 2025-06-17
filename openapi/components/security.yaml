@@ -1,0 +1,5 @@
+ApiKeyAuth: # Name of the security scheme
+  type: apiKey
+  in: header # Or 'query' or 'cookie'
+  name: X-API-KEY # Name of the header, query parameter or cookie
+  description: API Key for authenticated access.

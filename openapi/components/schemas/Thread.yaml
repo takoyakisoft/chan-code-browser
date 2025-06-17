@@ -1,0 +1,32 @@
+type: object
+description: Represents a thread on a message board.
+properties:
+  id:
+    type: string
+    description: Unique identifier for the thread (e.g., '1609459200', often a Unix timestamp of creation or dat ID).
+    example: '1609459200'
+  title:
+    type: string
+    description: Title of the thread.
+    example: '【速報】メインタイトル ★1'
+  resCount:
+    type: integer
+    format: int32
+    description: Number of replies (responses) in the thread.
+    example: 150
+  lastModified:
+    type: string
+    format: date-time
+    description: Timestamp of the last post in the thread.
+    example: '2023-01-01T12:00:00Z'
+  # Could add other fields like勢い (ikioi - momentum/velocity)
+  # momentum:
+  #   type: number
+  #   format: float
+  #   description: Momentum of the thread.
+  #   example: 25.5
+required:
+  - id
+  - title
+  - resCount
+  - lastModified

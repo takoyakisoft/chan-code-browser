@@ -1,0 +1,28 @@
+type: object
+description: Provides information for paginated responses.
+properties:
+  totalCount:
+    type: integer
+    format: int32
+    description: Total number of items available.
+  limit:
+    type: integer
+    format: int32
+    description: Number of items per page.
+  offset:
+    type: integer
+    format: int32
+    description: Number of items skipped.
+  # Alternative: nextCursor/previousCursor for cursor-based pagination
+  # nextCursor:
+  #   type: string
+  #   nullable: true
+  #   description: Cursor to retrieve the next page of results.
+  # previousCursor:
+  #   type: string
+  #   nullable: true
+  #   description: Cursor to retrieve the previous page of results.
+required:
+  - totalCount
+  - limit
+  - offset

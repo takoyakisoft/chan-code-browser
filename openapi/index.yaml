@@ -1,0 +1,53 @@
+openapi: 3.1.0
+info:
+  title: 5ch Browser UI API # Updated
+  version: v1 # Retain or update
+  description: API specification for the 5ch browser UI, covering boards, threads, and posts. # Updated
+  contact: # Ensure this was added from previous validation step
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+servers: # Ensure this was added from previous validation step
+  - url: 'http://localhost:3000/api/v1'
+    description: Local development server
+  - url: 'https://production.example.com/api/v1'
+    description: Production server (example URL) # Updated description
+tags: # Ensure this was added from previous validation step
+  - name: Health
+    description: API health check operations
+  - name: Boards
+    description: Operations related to message boards
+  - name: Threads
+    description: Operations related to threads within boards
+  - name: Posts
+    description: Operations related to posts within threads
+security: # Added global security requirement
+  - ApiKeyAuth: []
+paths:
+  /ping:
+    $ref: './paths/ping.yaml' # Path Item $ref
+  /boards:
+    $ref: './paths/boards.yaml' # Path Item $ref, new file
+  /boards/{boardId}/threads:
+    $ref: './paths/boards/boardId/threads.yaml' # Path Item $ref, new file
+  /boards/{boardId}/threads/{threadId}/posts:
+    $ref: './paths/boards/boardId/threads/threadId/posts.yaml' # Path Item $ref, new consolidated file
+
+components:
+  schemas:
+    Error:
+      $ref: './components/schemas/error.yaml'
+    Board:
+      $ref: './components/schemas/Board.yaml'
+    Thread:
+      $ref: './components/schemas/Thread.yaml'
+    Post:
+      $ref: './components/schemas/Post.yaml'
+    PosterInfo: # This was user.yaml
+      $ref: './components/schemas/user.yaml'
+    Paging:
+      $ref: './components/schemas/Paging.yaml'
+  securitySchemes:
+    # This should point to the definition within security.yaml
+    ApiKeyAuth:
+      $ref: './components/security.yaml#/ApiKeyAuth'

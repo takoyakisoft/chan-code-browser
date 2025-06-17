@@ -1,0 +1,38 @@
+type: object
+description: Represents a single post within a thread.
+properties:
+  number: # Changed from 'id' to 'number' to represent post number in thread
+    type: integer
+    format: int32
+    description: The sequential number of the post within the thread (e.g., 1, 2, 3).
+    example: 1
+  authorName: # Changed from 'name' to 'authorName' for clarity
+    type: string
+    description: Name of the poster.
+    example: '名無しさん'
+  authorEmail:
+    type: string
+    nullable: true
+    description: Email address of the poster (often used for 'sage' or other commands).
+    example: 'sage'
+  authorId:
+    type: string
+    nullable: true
+    description: User ID displayed next to the name (can vary, e.g. IP hash, Be ID).
+    example: 'ID:AbCdEfGh0'
+  timestamp: # Changed from 'date' to 'timestamp' and specified format
+    type: string
+    format: date-time # Using ISO 8601 format
+    description: Date and time the post was made.
+    example: '2023-01-01T12:00:05Z'
+  content:
+    type: string
+    description: HTML content of the post.
+    example: '<p>This is a sample post.<br>With line breaks.</p>'
+  posterInfo:
+    $ref: './user.yaml' # Corrected to relative file path
+required:
+  - number
+  - authorName
+  - timestamp
+  - content
